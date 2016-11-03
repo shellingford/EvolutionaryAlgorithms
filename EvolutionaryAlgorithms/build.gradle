@@ -1,0 +1,149 @@
+import com.google.common.io.ByteStreams
+import org.apache.tools.ant.filters.ReplaceTokens
+import org.apache.tools.ant.taskdefs.condition.Os
+
+buildscript {
+  repositories {
+    jcenter()
+  }
+  dependencies {
+    classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
+    classpath 'com.google.guava:guava:17.0'
+    classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE'
+  }
+}
+
+group = 'evoalg'
+version = '001'
+
+apply plugin: 'checkstyle'
+apply plugin: 'com.github.ben-manes.versions'
+apply plugin: 'eclipse'
+apply plugin: 'findbugs'
+apply plugin: 'java'
+apply plugin: 'spring-boot'
+apply plugin: 'war'
+
+sourceCompatibility = 1.7
+
+def profile = System.properties.profile ?: 'development'
+if (!['development', 'production', 'uat'].contains(profile)) {
+  throw new Error('invalid profile')
+}
+
+repositories {
+  jcenter()
+}
+
+sourceSets {
+  integ {
+    java {
+      compileClasspath += main.output + test.output
+      runtimeClasspath += main.output + test.output
+    }
+  }
+}
+
+sourceSets.each {
+  it.resources.srcDir "src/$it.name/javascript"
+}
+
+configurations {
+  proprietary
+  (profile == 'production' ? providedCompile : compile).extendsFrom proprietary
+
+  integCompile.extendsFrom configurations.testCompile
+  integRuntime.extendsFrom configurations.testRuntime
+
+  all {
+    exclude group: 'commons-logging'
+    exclude group: 'org.apache.tomcat'
+    exclude group: 'org.apache.tomcat.embed'
+    exclude module: 'spring-boot-starter-tomcat'
+  }
+}
+
+dependencies {
+  compile 'joda-time:joda-time'
+  compile 'org.springframework.boot:spring-boot-actuator'
+
+  compile 'com.google.guava:guava:20.0'
+  compile 'org.projectlombok:lombok:1.16.10'
+  compile 'org.apache.commons:commons-lang3:3.5'
+  compile 'org.apache.commons:commons-collections4:4.1'
+  
+  testCompile 'junit:junit'
+  testCompile 'org.mockito:mockito-core'
+}
+
+String springInstrPath = configurations.compile.files.find { it.name.contains('spring-instrument') }
+String arg = '-javaagent:'+springInstrPath
+
+applicationDefaultJvmArgs = [arg]
+
+task wrapper(type: Wrapper) {
+  gradleVersion = '2.0'
+}
+
+tasks.withType(JavaCompile) { options.compilerArgs << '-Xlint:none'}
+
+war {
+  archiveName "$baseName.$extension"
+}
+
+springBoot {
+  backupSource = false
+}
+
+checkstyle {
+  configProperties = [basedir: projectDir]
+}
+
+findbugs {
+  effort = 'max'
+  excludeFilter = file('config/findbugs/exclude.xml')
+}
+
+eclipse {
+  project {
+    buildCommand 'net.sf.eclipsecs.core.CheckstyleBuilder'
+    buildCommand 'edu.umd.cs.findbugs.plugin.eclipse.findbugsBuilder'
+    natures 'net.sf.eclipsecs.core.CheckstyleNature'
+    natures 'edu.umd.cs.findbugs.plugin.eclipse.findbugsNature'
+
+    file {
+      withXml {
+        def filter = it.asNode().appendNode('filteredResources').appendNode('filter')
+        filter.appendNode('id', System.currentTimeMillis())
+        filter.appendNode('name', '')
+        filter.appendNode('type', 30)
+        def matcher = filter.appendNode('matcher')
+        matcher.appendNode('id', 'org.eclipse.ui.ide.multiFilter')
+        matcher.appendNode('arguments', '1.0-projectRelativePath-matches-true-true-' +
+          '^(\\.git|build|\\.gradle)/.*$')
+      }
+    }
+  }
+
+  jdt {
+    file {
+      withProperties {
+        it['org.eclipse.jdt.core.compiler.processAnnotations'] = 'enabled'
+      }
+    }
+  }
+}
+
+tasks.eclipse << {
+  copy {
+    from('config/eclipse') {
+      rename '^apt\\.properties$', '.settings/org.eclipse.jdt.apt.core.prefs'
+      rename '^apt\\.xml$', '.factorypath'
+      rename '^checkstyle\\.xml$', '.checkstyle'
+      rename '^findbugs\\.properties$', '.settings/edu.umd.cs.findbugs.core.prefs'
+    }
+    into '.'
+  }
+}
+
+task afterEclipseImport dependsOn tasks.eclipse
