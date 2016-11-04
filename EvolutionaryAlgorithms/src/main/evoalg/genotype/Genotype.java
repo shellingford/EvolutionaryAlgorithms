@@ -2,38 +2,45 @@ package evoalg.genotype;
 
 import java.util.List;
 
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import evoalg.State;
 
-@Getter(value = AccessLevel.PUBLIC)
+@Getter
 @AllArgsConstructor
 public abstract class Genotype<T extends Genotype<T>> {
 
-  private int genotypeId;
-  private String name;
-  private State<T> state;
+  private final int genotypeId;
+  private final String name;
+  private final State<T> state;
 
   public Genotype(State<T> state, String name) {
     this.state = state;
     this.name = name;
+    this.genotypeId = 0;
   }
 
-  public abstract void initialize();
-
+  /**
+   * Creates deep copy of genotype object.
+   *
+   * @return deep copy of genotype object
+   */
   public abstract T copy();
 
+  /**
+   * Immutable collection of crossover operators that will be used
+   * for current genotype representation.
+   *
+   * @return immutable collection of crossover operators
+   */
   public abstract List<CrossoverOp<T>> getCrossoverOp();
 
+  /**
+   * Immutable collection of mutation operators that will be used
+   * for current genotype representation.
+   *
+   * @return immutable collection of mutation operators
+   */
   public abstract List<MutationOp<T>> getMutationOp();
-
-  public void setGenotypeId(int genotypeId) {
-    this.genotypeId = genotypeId;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
 
 }

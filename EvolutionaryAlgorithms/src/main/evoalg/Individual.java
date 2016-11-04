@@ -23,7 +23,6 @@ public class Individual<T extends Genotype<T>> extends ArrayList<T> {
   public void initialize() {
     for (int i = 0; i < state.getGenotypes().size(); i++) {
       T gen = state.getGenotypes().get(i).copy();
-      gen.initialize();
       add(gen);
 
     }

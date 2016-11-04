@@ -1,5 +1,6 @@
 package evoalg.genotype.bitstring;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -25,23 +26,23 @@ public class BitStringMutMix extends MutationOp<BitString> {
 
   @Override
   public BitString mutate(BitString genotype) {
-    genotype = genotype.copy();
     int point1 = getRandom().nextInt(genotype.size() - 1);
     int point2 = point1 + 1 + getRandom().nextInt(genotype.size() - point1 - 1);
 
-    shuffleValuesBetweenPoints(genotype, point1, point2);
-
-    return genotype;
+    return shuffleValuesBetweenPoints(genotype, point1, point2);
   }
 
-  private void shuffleValuesBetweenPoints(BitString genotype, int point1, int point2) {
-    List<Byte> dataBetweenPoints = genotype.getData().subList(point1, point2 + 1);
+  private BitString shuffleValuesBetweenPoints(BitString genotype, int point1, int point2) {
+    List<Byte> dataBetweenPoints = new ArrayList<>(genotype.getData().subList(point1, point2 + 1));
     Collections.shuffle(dataBetweenPoints);
-    IntStream.range(point1, point2).forEach(i -> setNewValues(i, point1, genotype,
-        dataBetweenPoints));
+
+    List<Byte> newData = new ArrayList<>(genotype.getData());
+    IntStream.range(point1, point2 + 1).forEach(i -> setNewValues(i, point1, newData, dataBetweenPoints));
+
+    return genotype.replaceData(newData);
   }
 
-  private void setNewValues(int i, int point1, BitString genotype, List<Byte> dataBetweenPoints) {
-    genotype.getData().set(i, dataBetweenPoints.get(i - point1));
+  private void setNewValues(int i, int point1, List<Byte> data, List<Byte> dataBetweenPoints) {
+    data.set(i, dataBetweenPoints.get(i - point1));
   }
 }

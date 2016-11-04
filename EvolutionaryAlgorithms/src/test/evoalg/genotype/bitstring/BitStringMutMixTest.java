@@ -1,11 +1,13 @@
 package evoalg.genotype.bitstring;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -23,11 +25,18 @@ public class BitStringMutMixTest {
     BitString genotype = new BitString(state, data);
 
     BitStringMutMix mutOp = new BitStringMutMix(state);
-    BitString mutatedGenotype = mutOp.mutate(genotype);
 
     //as mutation operator will change at least two bits, when we have only two bits it means we expect
-    //to get reverse list of bits
-    assertEquals(expectedMutatedData, mutatedGenotype.getData());
+    //to get reverse list of bits, but as it is random shuffle it can happen that we get the same list
+    //again so we need to repeat the test few times to have higher chance for it to not fail
+    boolean expectedRandomBehaviour = false;
+    for (int i = 0; i < 5; i++) {
+      BitString mutatedGenotype = mutOp.mutate(genotype);
+      expectedRandomBehaviour = expectedRandomBehaviour ||
+          CollectionUtils.isEqualCollection(expectedMutatedData, mutatedGenotype.getData());
+    }
+
+    assertTrue(expectedRandomBehaviour);
   }
 
   @Test

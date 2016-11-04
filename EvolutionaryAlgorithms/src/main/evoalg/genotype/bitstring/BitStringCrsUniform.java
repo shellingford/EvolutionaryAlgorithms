@@ -26,7 +26,7 @@ public class BitStringCrsUniform extends CrossoverOp<BitString> {
 
   @Override
   public BitString mate(BitString ind1, BitString ind2) {
-    return new BitString(getState(), "", 0, IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, ind1, ind2))
+    return new BitString(getState(), IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, ind1, ind2))
         .collect(Collectors.toList()));
   }
 

@@ -1,5 +1,8 @@
 package evoalg.genotype.bitstring;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import evoalg.State;
 import evoalg.genotype.MutationOp;
 
@@ -21,10 +24,12 @@ public class BitStringMutSimple extends MutationOp<BitString> {
 
   @Override
   public BitString mutate(BitString genotype) {
-    genotype = genotype.copy();
     int position = getRandom().nextInt(genotype.size());
-    genotype.set(position, (byte) ((genotype.get(position) + 1) % 2));
-    return genotype;
+
+    List<Byte> newData = new ArrayList<>(genotype.getData());
+    newData.set(position, (byte) ((newData.get(position) + 1) % 2));
+
+    return genotype.replaceData(newData);
   }
 
 }

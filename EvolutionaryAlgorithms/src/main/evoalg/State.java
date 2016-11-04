@@ -29,11 +29,6 @@ public class State<T extends Genotype<T>> {
   }
 
   public void initialize(String[] args) {
-    for (int i = 0; i < genotype.size(); i++) {
-      T gen = genotype.get(i);
-      ((Genotype<T>) gen).initialize();
-    }
-
     // algorithm.setCrossover(crossover);
     // algorithm.setMutation(mutation);
 
