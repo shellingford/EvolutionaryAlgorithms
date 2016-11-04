@@ -14,21 +14,29 @@ import evoalg.genotype.MutationOp;
 public class BitString extends Genotype<BitString> {
 
   private List<Byte> data;
-  private int nBits;
+  private final int nBits;
 
   public BitString(State<BitString> state) {
     this(state, 0);
+    initialize();
   }
 
   public BitString(State<BitString> state, int nBits) {
     super(state, "BitString");
-    data = new ArrayList<>(nBits);
     this.nBits = nBits;
+    initialize();
+  }
+
+  public BitString(State<BitString> state, String name, int genotypeId, List<Byte> data) {
+    super(genotypeId, name, state);
+    this.data = data;
+    this.nBits = data.size();
   }
 
   public BitString(State<BitString> state, List<Byte> data) {
-    super(state, "BitString");
+    super(0, "", state);
     this.data = data;
+    this.nBits = data.size();
   }
 
   @Override
@@ -42,14 +50,7 @@ public class BitString extends Genotype<BitString> {
 
   @Override
   public BitString copy() {
-    BitString copy = new BitString(getState(), data.size());
-
-    for (int i = 0; i < copy.size(); i++) {
-      copy.set(i, data.get(i));
-    }
-    copy.setGenotypeId(getGenotypeId());
-    copy.setName(getName());
-    return copy;
+    return new BitString(getState(), getName(), getGenotypeId(), new ArrayList<Byte>(data));
   }
 
   @Override

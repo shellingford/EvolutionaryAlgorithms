@@ -3,10 +3,12 @@ package evoalg.genotype;
 import java.util.List;
 
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import evoalg.State;
 
 @Getter(value = AccessLevel.PUBLIC)
+@AllArgsConstructor
 public abstract class Genotype<T extends Genotype<T>> {
 
   private int genotypeId;

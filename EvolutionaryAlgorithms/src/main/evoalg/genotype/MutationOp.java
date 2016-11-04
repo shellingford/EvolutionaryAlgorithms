@@ -19,7 +19,7 @@ public abstract class MutationOp<T extends Genotype<T>> {
     this.probability = 0;
   }
 
-  public abstract void mutate(T ind);
+  public abstract T mutate(T ind);
 
   public void setMyGenotype(T myGenotype) {
     this.myGenotype = myGenotype;

@@ -1,10 +1,24 @@
 package evoalg.genotype.bitstring;
 
-import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import evoalg.State;
 import evoalg.genotype.CrossoverOp;
 
+/**
+ * Single-point bitstring crossover operator.
+ *
+ *  Algorithm: first randomly select a point within bitstring of both parents, then randomly select if
+ *  data before the point will be copied from parent1 or parent2, and after vice versa. There's 50% chance
+ *  that parent1 will be used for first part of the child bitstring.
+ *
+ *  For example:
+ *  Parent1: 010 | 0101
+ *  Parent2: 001 | 1111
+ *
+ *  Child:   0101111 (first part copied from p1, second from p2)
+ */
 public class BitStringCrsOnePoint extends CrossoverOp<BitString> {
 
   public BitStringCrsOnePoint(State<BitString> state) {
@@ -12,30 +26,25 @@ public class BitStringCrsOnePoint extends CrossoverOp<BitString> {
   }
 
   @Override
-  public BitString mate(BitString genotip1, BitString genotip2) {
-    Random random = new Random();
-    int i;
+  public BitString mate(BitString ind1, BitString ind2) {
+    int point = getRandom().nextInt(ind1.size());
 
-    int pozicija = random.nextInt(genotip1.size());
-    BitString novi = new BitString(getState(), genotip1.size());
-    switch (random.nextInt(2)) {
-    case 0:
-      for (i = 0; i < pozicija; i++) {
-        novi.set(i, genotip1.get(i));
-      }
-      for (i = pozicija; i < genotip1.size(); i++) {
-        novi.set(i, genotip2.get(i));
-      }
-      break;
-    case 1:
-      for (i = 0; i < pozicija; i++) {
-        novi.set(i, genotip2.get(i));
-      }
-      for (i = pozicija; i < genotip1.size(); i++) {
-        novi.set(i, genotip1.get(i));
-      }
-      break;
+    if (getRandom().nextBoolean()) {
+      return new BitString(getState(), IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, point, ind1, ind2))
+          .collect(Collectors.toList()));
     }
-    return novi;
+    else {
+      return new BitString(getState(), IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, point, ind2, ind1))
+          .collect(Collectors.toList()));
+    }
+  }
+
+  private byte mapNewByte(int i, int point, BitString p1, BitString p2) {
+    if (i < point) {
+      return p1.get(i);
+    }
+    else {
+      return p2.get(i);
+    }
   }
 }

@@ -1,8 +1,22 @@
 package evoalg.genotype.bitstring;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.IntStream;
+
 import evoalg.State;
 import evoalg.genotype.MutationOp;
 
+/**
+ * Mix bitstring mutation operator.
+ * Algorithm: first select two points in the bitstring and then between those points (inclusive both)
+ * randomly replace 1s and 0s, but the count of 1s and 0s needs to stay the same.
+ *
+ * For example:
+ *  Bitstring: 01 | 001 | 11
+ *
+ *  Mutated:   01 | 010 | 11
+ */
 public class BitStringMutMix extends MutationOp<BitString> {
 
   public BitStringMutMix(State<BitString> state) {
@@ -10,57 +24,24 @@ public class BitStringMutMix extends MutationOp<BitString> {
   }
 
   @Override
-  public void mutate(BitString bitstring) {
-    int bitIndexSmaller = getRandom().nextInt(bitstring.size());
-    int bitIndexBigger;
+  public BitString mutate(BitString genotype) {
+    genotype = genotype.copy();
+    int point1 = getRandom().nextInt(genotype.size() - 1);
+    int point2 = point1 + 1 + getRandom().nextInt(genotype.size() - point1 - 1);
 
-    do {
-      bitIndexBigger = getRandom().nextInt(bitstring.size());
-    } while (bitIndexSmaller == bitIndexBigger);
+    shuffleValuesBetweenPoints(genotype, point1, point2);
 
-    int tmp = bitIndexSmaller;
-    if (bitIndexSmaller > bitIndexBigger) {
-      bitIndexSmaller = bitIndexBigger;
-      bitIndexBigger = tmp;
-    }
+    return genotype;
+  }
 
-    int counter0 = 0;
-    int counter1 = 0;
+  private void shuffleValuesBetweenPoints(BitString genotype, int point1, int point2) {
+    List<Byte> dataBetweenPoints = genotype.getData().subList(point1, point2 + 1);
+    Collections.shuffle(dataBetweenPoints);
+    IntStream.range(point1, point2).forEach(i -> setNewValues(i, point1, genotype,
+        dataBetweenPoints));
+  }
 
-    for (int i = bitIndexSmaller; i <= bitIndexBigger; i++) {
-      if (bitstring.get(i) == 1) {
-        counter1++;
-      }
-      else {
-        counter0++;
-      }
-    }
-
-    int fairness0 = counter0;
-    int fairness1 = counter1;
-
-    for (int i = bitIndexSmaller; i <= bitIndexBigger; i++) {
-      int rnd = getRandom().nextInt(fairness0 + fairness1) + 1;
-      if (rnd <= fairness1) {
-        if (counter1 > 0) {
-          bitstring.set(i, (byte) 1);
-          counter1--;
-        }
-        else {
-          bitstring.set(i, (byte) 0);
-          counter0--;
-        }
-      }
-      else {
-        if (counter0 > 0) {
-          bitstring.set(i, (byte) 0);
-          counter0--;
-        }
-        else {
-          bitstring.set(i, (byte) 1);
-          counter1--;
-        }
-      }
-    }
+  private void setNewValues(int i, int point1, BitString genotype, List<Byte> dataBetweenPoints) {
+    genotype.getData().set(i, dataBetweenPoints.get(i - point1));
   }
 }

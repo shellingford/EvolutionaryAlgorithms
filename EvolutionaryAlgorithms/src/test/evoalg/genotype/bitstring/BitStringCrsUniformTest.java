@@ -17,7 +17,8 @@ public class BitStringCrsUniformTest {
 
   @Test
   public void matesCorrectlyForEqualIndividuals() {
-    State state = Mockito.mock(State.class);
+    @SuppressWarnings("unchecked")
+    State<BitString> state = Mockito.mock(State.class);
 
     List<Byte> data = IntStream.range(0, 5).mapToObj(i -> (byte) 1).collect(Collectors.toList());
     BitString ind1 = new BitString(state, data);
@@ -32,7 +33,8 @@ public class BitStringCrsUniformTest {
 
   @Test
   public void matesCorrectlyForDifferentIndividuals() {
-    State state = Mockito.mock(State.class);
+    @SuppressWarnings("unchecked")
+    State<BitString> state = Mockito.mock(State.class);
 
     List<Byte> data = IntStream.range(0, 5).mapToObj(i -> (byte) 1).collect(Collectors.toList());
     BitString ind1 = new BitString(state, data);
