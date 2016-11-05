@@ -3,6 +3,10 @@ package evoalg.fitness;
 import evoalg.Individual;
 import evoalg.genotype.Genotype;
 
+/**
+ *  Fitness comparator that sorts individuals by their value from
+ *  the one with lowest value to the one with highest.
+ */
 public class FitnessMin<T extends Genotype<T>> extends Fitness<T> {
 
   public FitnessMin(Individual<T> individual, double value) {
@@ -21,7 +25,12 @@ public class FitnessMin<T extends Genotype<T>> extends Fitness<T> {
 
   @Override
   public int compareTo(Fitness<T> fitness) {
-    return Double.compare(getValue(), fitness.getValue()) * -1;
+    return Double.compare(getValue(), fitness.getValue());
+  }
+
+  @Override
+  public String toString() {
+    return "FitnessMin [getValue()=" + getValue() + "]";
   }
 
 }

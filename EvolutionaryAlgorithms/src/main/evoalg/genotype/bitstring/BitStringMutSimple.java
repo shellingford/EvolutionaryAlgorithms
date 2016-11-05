@@ -3,7 +3,6 @@ package evoalg.genotype.bitstring;
 import java.util.ArrayList;
 import java.util.List;
 
-import evoalg.State;
 import evoalg.genotype.MutationOp;
 
 /**
@@ -17,10 +16,6 @@ import evoalg.genotype.MutationOp;
  *  Mutated:   0110101
  */
 public class BitStringMutSimple extends MutationOp<BitString> {
-
-  public BitStringMutSimple(State<BitString> state) {
-    super(state);
-  }
 
   @Override
   public BitString mutate(BitString genotype) {

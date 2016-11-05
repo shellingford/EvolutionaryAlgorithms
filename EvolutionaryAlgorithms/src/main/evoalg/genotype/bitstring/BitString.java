@@ -8,7 +8,6 @@ import lombok.Getter;
 
 import com.google.common.collect.ImmutableList;
 
-import evoalg.State;
 import evoalg.genotype.CrossoverOp;
 import evoalg.genotype.Genotype;
 import evoalg.genotype.MutationOp;
@@ -19,26 +18,26 @@ public class BitString extends Genotype<BitString> {
   @Getter
   private final int nBits;
 
-  public BitString(State<BitString> state) {
-    this(state, 0);
+  public BitString() {
+    this(0);
     initialize();
   }
 
-  public BitString(State<BitString> state, int nBits) {
-    super(state, "BitString");
+  public BitString(int nBits) {
+    super("BitString");
     this.nBits = nBits;
     data = new ArrayList<>(nBits);
     initialize();
   }
 
-  public BitString(State<BitString> state, String name, int genotypeId, List<Byte> data) {
-    super(genotypeId, name, state);
+  public BitString(String name, int genotypeId, List<Byte> data) {
+    super(genotypeId, name);
     this.data = data;
     this.nBits = data.size();
   }
 
-  public BitString(State<BitString> state, List<Byte> data) {
-    super(0, "", state);
+  public BitString(List<Byte> data) {
+    super(0, "");
     this.data = data;
     this.nBits = data.size();
   }
@@ -63,17 +62,17 @@ public class BitString extends Genotype<BitString> {
    * @return copy of current instance of BitString with new bits
    */
   public BitString replaceData(List<Byte> newData) {
-    return new BitString(getState(), getName(), getGenotypeId(), new ArrayList<Byte>(newData));
+    return new BitString(getName(), getGenotypeId(), new ArrayList<Byte>(newData));
   }
 
   @Override
   public List<CrossoverOp<BitString>> getCrossoverOp() {
-    return ImmutableList.of(new BitStringCrsOnePoint(getState()));
+    return ImmutableList.of(new BitStringCrsOnePoint());
   }
 
   @Override
   public List<MutationOp<BitString>> getMutationOp() {
-    return ImmutableList.of(new BitStringMutSimple(getState()));
+    return ImmutableList.of(new BitStringMutSimple());
   }
 
   public byte get(int index) {

@@ -9,22 +9,16 @@ import java.util.stream.IntStream;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import evoalg.State;
 
 public class BitStringMutMixTest {
-
-  @SuppressWarnings("unchecked")
-  private State<BitString> state = Mockito.mock(State.class);
 
   @Test
   public void mutatesCorrectly() {
     List<Byte> data = Arrays.asList((byte) 0, (byte) 1);
     List<Byte> expectedMutatedData = Arrays.asList((byte) 1, (byte) 0);
-    BitString genotype = new BitString(state, data);
+    BitString genotype = new BitString(data);
 
-    BitStringMutMix mutOp = new BitStringMutMix(state);
+    BitStringMutMix mutOp = new BitStringMutMix();
 
     //as mutation operator will change at least two bits, when we have only two bits it means we expect
     //to get reverse list of bits, but as it is random shuffle it can happen that we get the same list
@@ -42,12 +36,12 @@ public class BitStringMutMixTest {
   @Test
   public void mutatesCorrectlyRegarding01Count() {
     List<Byte> data = Arrays.asList((byte) 0, (byte) 1, (byte) 0, (byte) 1, (byte) 1, (byte) 1, (byte) 0);
-    BitString genotype = new BitString(state, data);
+    BitString genotype = new BitString(data);
 
     int expected0Count = 3;
     int expected1Count = 4;
 
-    BitStringMutMix mutOp = new BitStringMutMix(state);
+    BitStringMutMix mutOp = new BitStringMutMix();
     BitString mutatedGenotype = mutOp.mutate(genotype);
 
     checkCounts(expected0Count, expected1Count, mutatedGenotype.getData());

@@ -3,7 +3,6 @@ package evoalg.genotype.bitstring;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import evoalg.State;
 import evoalg.genotype.CrossoverOp;
 
 /**
@@ -21,20 +20,16 @@ import evoalg.genotype.CrossoverOp;
  */
 public class BitStringCrsOnePoint extends CrossoverOp<BitString> {
 
-  public BitStringCrsOnePoint(State<BitString> state) {
-    super(state);
-  }
-
   @Override
   public BitString mate(BitString ind1, BitString ind2) {
     int point = getRandom().nextInt(ind1.size());
 
     if (getRandom().nextBoolean()) {
-      return new BitString(getState(), IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, point, ind1, ind2))
+      return new BitString(IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, point, ind1, ind2))
           .collect(Collectors.toList()));
     }
     else {
-      return new BitString(getState(), IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, point, ind2, ind1))
+      return new BitString(IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, point, ind2, ind1))
           .collect(Collectors.toList()));
     }
   }

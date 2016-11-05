@@ -4,7 +4,6 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import evoalg.State;
 
 @Getter
 @AllArgsConstructor
@@ -12,10 +11,8 @@ public abstract class Genotype<T extends Genotype<T>> {
 
   private final int genotypeId;
   private final String name;
-  private final State<T> state;
 
-  public Genotype(State<T> state, String name) {
-    this.state = state;
+  public Genotype(String name) {
     this.name = name;
     this.genotypeId = 0;
   }

@@ -1,17 +1,13 @@
 package evoalg.algorithm;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import evoalg.Deme;
 import evoalg.Individual;
-import evoalg.State;
 import evoalg.genotype.Crossover;
 import evoalg.genotype.Genotype;
 import evoalg.genotype.Mutation;
-import evoalg.selection.SelRandomOp;
-import evoalg.selection.SelWorstOp;
 import evoalg.selection.SelectionOperator;
 
 /**
@@ -23,8 +19,8 @@ public class SteadyStateTournament<T extends Genotype<T>> extends Algorithm<T> {
   private SelectionOperator<T> selRandomOp;
   private SelectionOperator<T> selWorstOp;
 
-  public SteadyStateTournament(State<T> state, Mutation<T> mutation, Crossover<T> crossover) {
-    super(state, "SteadyStateTournament", mutation, crossover, Arrays.asList(new SelRandomOp<T>(), new SelWorstOp<T>()));
+  public SteadyStateTournament(Mutation<T> mutation, Crossover<T> crossover) {
+    super(mutation, crossover);
   }
 
   @Override
@@ -36,8 +32,9 @@ public class SteadyStateTournament<T extends Genotype<T>> extends Algorithm<T> {
   }
 
   @Override
-  public void advanceGeneration(Deme<T> deme) {
+  public Deme<T> advanceGeneration(Deme<T> deme) {
     List<Individual<T>> tournament = new ArrayList<Individual<T>>();
+    Deme<T> newDeme = new Deme<>(deme.getIevaluate(), deme.getGenotype());
 
     for (int i = 0; i < deme.size(); i++) {
       tournament.clear();
@@ -49,9 +46,12 @@ public class SteadyStateTournament<T extends Genotype<T>> extends Algorithm<T> {
       Individual<T> worst = selWorstOp.select(tournament);
       removeFrom(worst, tournament);
 
-      mate(tournament.get(0), tournament.get(1), worst);
-      mutate(worst);
-      worst.evaluate();
+      Individual<T> child = mate(tournament.get(0), tournament.get(1));
+      child = mutate(child);
+      child = child.evaluate();
+      newDeme.add(child);
     }
+
+    return newDeme;
   }
 }

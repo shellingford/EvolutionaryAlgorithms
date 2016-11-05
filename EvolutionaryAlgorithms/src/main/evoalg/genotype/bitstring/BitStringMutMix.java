@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
 
-import evoalg.State;
 import evoalg.genotype.MutationOp;
 
 /**
@@ -19,10 +18,6 @@ import evoalg.genotype.MutationOp;
  *  Mutated:   01 | 010 | 11
  */
 public class BitStringMutMix extends MutationOp<BitString> {
-
-  public BitStringMutMix(State<BitString> state) {
-    super(state);
-  }
 
   @Override
   public BitString mutate(BitString genotype) {

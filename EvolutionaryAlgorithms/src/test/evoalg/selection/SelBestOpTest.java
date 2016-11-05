@@ -23,7 +23,8 @@ public class SelBestOpTest {
     SelBestOp<BitString> selector = new SelBestOp<BitString>();
     Individual<BitString> selected = selector.select(individuals);
 
-    assertEquals(0d, selected.getFitness().getValue(), 0.001);
+    //using FitnessMax so the best individual will have highest fitness value
+    assertEquals(3d, selected.getFitness().getValue(), 0.001);
   }
 
   @SuppressWarnings("unchecked")

@@ -10,22 +10,16 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import org.junit.Test;
-import org.mockito.Mockito;
-
-import evoalg.State;
 
 public class BitStringCrsOnePointTest {
-
-  @SuppressWarnings("unchecked")
-  private State<BitString> state = Mockito.mock(State.class);
 
   @Test
   public void matesCorrectlyForEqualIndividuals() {
     List<Byte> data = IntStream.range(0, 5).mapToObj(i -> (byte) 1).collect(Collectors.toList());
-    BitString ind1 = new BitString(state, data);
-    BitString ind2 = new BitString(state, data);
+    BitString ind1 = new BitString(data);
+    BitString ind2 = new BitString(data);
 
-    BitStringCrsOnePoint crs = new BitStringCrsOnePoint(state);
+    BitStringCrsOnePoint crs = new BitStringCrsOnePoint();
     BitString ind3 = crs.mate(ind1, ind2);
 
     assertEquals(ind1.getData(), ind3.getData());
@@ -35,11 +29,11 @@ public class BitStringCrsOnePointTest {
   @Test
   public void matesCorrectlyForDifferentIndividuals() {
     List<Byte> data1 = IntStream.range(0, 5).mapToObj(i -> (byte) 0).collect(Collectors.toList());
-    BitString parent0 = new BitString(state, data1);
+    BitString parent0 = new BitString(data1);
     List<Byte> data2 = IntStream.range(0, 5).mapToObj(i -> (byte) 1).collect(Collectors.toList());
-    BitString parent1 = new BitString(state, data2);
+    BitString parent1 = new BitString(data2);
 
-    BitStringCrsUniform crs = new BitStringCrsUniform(state);
+    BitStringCrsUniform crs = new BitStringCrsUniform();
     Set<Byte> parentIds = new HashSet<>();
     // there is always a chance that random selection of the parent will result in
     // taking the same parent 2 times in a row, so we run the test multiple times and
