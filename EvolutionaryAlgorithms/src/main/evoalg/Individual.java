@@ -45,7 +45,7 @@ public class Individual<T extends Genotype<T>> extends ArrayList<T> {
   }
 
   public void evaluate() {
-    fitness.evaluate(ievaluate);
+    fitness = fitness.evaluate(ievaluate);
   }
 
   public Fitness<T> getFitness() {

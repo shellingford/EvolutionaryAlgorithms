@@ -58,7 +58,6 @@ public abstract class Algorithm<T extends Genotype<T>> {
 
   protected void evaluate(Individual<T> ind) {
     ind.setFitness(state.getFitness().copy());
-    ind.getFitness().setIndividual(ind);
     ind.evaluate();
   }
 

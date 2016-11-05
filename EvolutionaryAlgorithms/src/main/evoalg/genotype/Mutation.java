@@ -67,8 +67,6 @@ public class Mutation<T extends Genotype<T>> {
   }
 
   public void mutate(Individual<T> ind) {
-    ind.getFitness().setValid(false);
-
     if (mutGenotypes.equalsIgnoreCase("random")) {
       int iGenotype = random.nextInt(ind.size());
       int iOperator;

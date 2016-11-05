@@ -24,7 +24,7 @@ public class State<T extends Genotype<T>> {
     population = new Population<T>(this, ievaluate);
     crossover = new Crossover<T>(this);
     mutation = new Mutation<T>(this);
-    fitness = ievaluate.createFitness();
+    //fitness = ievaluate.createFitness();
     genotype = new ArrayList<>();
   }
 

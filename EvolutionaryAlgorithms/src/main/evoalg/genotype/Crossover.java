@@ -52,8 +52,6 @@ public class Crossover<T extends Genotype<T>> {
   }
 
   public void mate(Individual<T> ind1, Individual<T> ind2, Individual<T> child) {
-    child.getFitness().setValid(false);
-
     if (ind1 == child) {
       ind1 = ind1.copy();
     }
