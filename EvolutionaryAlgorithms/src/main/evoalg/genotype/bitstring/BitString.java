@@ -4,54 +4,45 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import lombok.Getter;
-
 import com.google.common.collect.ImmutableList;
 
-import evoalg.genotype.CrossoverOp;
 import evoalg.genotype.Genotype;
-import evoalg.genotype.MutationOp;
 
+/**
+ *
+ */
 public class BitString extends Genotype<BitString> {
 
   private final List<Byte> data;
-  @Getter
-  private final int nBits;
 
   public BitString() {
     this(0);
-    initialize();
   }
 
   public BitString(int nBits) {
-    super("BitString");
-    this.nBits = nBits;
     data = new ArrayList<>(nBits);
-    initialize();
-  }
-
-  public BitString(String name, int genotypeId, List<Byte> data) {
-    super(genotypeId, name);
-    this.data = data;
-    this.nBits = data.size();
+    initialize(nBits);
   }
 
   public BitString(List<Byte> data) {
-    super(0, "");
     this.data = data;
-    this.nBits = data.size();
   }
 
-  private void initialize() {
+  private void initialize(int nBits) {
     Random random = new Random();
-    for (int i = 0; i < data.size(); i++) {
-      data.set(i, (byte) random.nextInt(2));
+    for (int i = 0; i < nBits; i++) {
+      data.add((byte) random.nextInt(2));
     }
   }
 
   @Override
   public BitString copy() {
     return replaceData(data);
+  }
+
+  @Override
+  public BitString initializeData() {
+    return new BitString(data.size());
   }
 
   /**
@@ -62,17 +53,7 @@ public class BitString extends Genotype<BitString> {
    * @return copy of current instance of BitString with new bits
    */
   public BitString replaceData(List<Byte> newData) {
-    return new BitString(getName(), getGenotypeId(), new ArrayList<Byte>(newData));
-  }
-
-  @Override
-  public List<CrossoverOp<BitString>> getCrossoverOp() {
-    return ImmutableList.of(new BitStringCrsOnePoint());
-  }
-
-  @Override
-  public List<MutationOp<BitString>> getMutationOp() {
-    return ImmutableList.of(new BitStringMutSimple());
+    return new BitString(new ArrayList<Byte>(newData));
   }
 
   public byte get(int index) {
@@ -88,12 +69,38 @@ public class BitString extends Genotype<BitString> {
   }
 
   @Override
-  public String toString() {
-    String str = "";
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((data == null) ? 0 : data.hashCode());
+    return result;
+  }
 
-    for (byte bit : data) {
-      str += bit;
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
     }
-    return str;
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    BitString other = (BitString) obj;
+    if (data == null) {
+      if (other.data != null) {
+        return false;
+      }
+    }
+    else if (!data.equals(other.data)) {
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public String toString() {
+    return "BitString [data=" + data + "]";
   }
 }

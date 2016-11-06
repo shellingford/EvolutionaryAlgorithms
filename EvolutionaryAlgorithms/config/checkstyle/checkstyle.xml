@@ -105,7 +105,7 @@
     <property name="message" value="Trailing whitespace." />
   </module>
   <module name="RegexpSingleline">
-    <property name="format" value="System\.(err|out)|\.printStackTrace" />
+    <property name="format" value="System\.(err)|\.printStackTrace" />
     <property name="message" value="System.out and System.err should not be used as loggers." />
     <property name="fileExtensions" value="java" />
   </module>

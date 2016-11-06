@@ -5,20 +5,28 @@ import java.util.List;
 import java.util.Random;
 
 import lombok.Getter;
+
+import com.google.common.collect.ImmutableList;
+
 import evoalg.Individual;
 
+/**
+ * Main mutation class that uses mutation operators to mutate and individual
+ * or a list of individuals.
+ *
+ * @param <T> genotype
+ */
 public class Mutation<T extends Genotype<T>> {
 
-  private List<MutationOp<T>> operators;
-  private List<Double> opProb;
+  private final List<MutationOp<T>> operators;
+  private final List<Double> opProb;
   @Getter
-  private Random random;
+  private final Random random;
   private double indMutProb;
-  private double geneMutProb;
 
-  public Mutation() {
+  public Mutation(List<MutationOp<T>> operators) {
+    this.operators = operators;
     this.random = new Random();
-    operators = new ArrayList<>();
     opProb = new ArrayList<>();
 
     initialize();
@@ -69,11 +77,14 @@ public class Mutation<T extends Genotype<T>> {
     }
   }
 
-  public void addOperator(MutationOp<T> operator) {
-    operators.add(operator);
+  /**
+   * Immutable collection of mutation operators that will be used
+   * for current genotype representation.
+   *
+   * @return immutable collection of mutation operators
+   */
+  public List<MutationOp<T>> getMutationOp() {
+    return ImmutableList.copyOf(operators);
   }
 
-  public double getGeneMutProb() {
-    return geneMutProb;
-  }
 }

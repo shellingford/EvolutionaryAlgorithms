@@ -4,16 +4,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.google.common.collect.ImmutableList;
+
 import evoalg.Individual;
 
+/**
+ * Main crossover class that uses crossover operators to mate two individuals
+ * to produce a child individual.
+ *
+ * @param <T> genotype
+ */
 public class Crossover<T extends Genotype<T>> {
 
   private List<CrossoverOp<T>> operators;
   private List<Double> opProb;
   private final Random random;
 
-  public Crossover() {
-    operators = new ArrayList<>();
+  public Crossover(List<CrossoverOp<T>> operators) {
+    this.operators = operators;
     opProb = new ArrayList<>();
     random = new Random();
 
@@ -45,7 +53,13 @@ public class Crossover<T extends Genotype<T>> {
     return new Individual<T>(ind1.getIevaluate(), croxGenotype);
   }
 
-  public void addOperator(CrossoverOp<T> operator) {
-    operators.add(operator);
+  /**
+   * Immutable collection of crossover operators that will be used
+   * for current genotype representation.
+   *
+   * @return immutable collection of crossover operators
+   */
+  public List<CrossoverOp<T>> getCrossoverOp() {
+    return ImmutableList.copyOf(operators);
   }
 }

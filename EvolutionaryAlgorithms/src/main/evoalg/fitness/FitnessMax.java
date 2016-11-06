@@ -1,6 +1,5 @@
 package evoalg.fitness;
 
-import evoalg.Individual;
 import evoalg.genotype.Genotype;
 
 /**
@@ -9,13 +8,13 @@ import evoalg.genotype.Genotype;
  */
 public class FitnessMax<T extends Genotype<T>> extends Fitness<T> {
 
-  public FitnessMax(Individual<T> individual, double value) {
-    super(individual, value);
+  public FitnessMax(double value) {
+    super(value);
   }
 
   @Override
   public FitnessMax<T> copy(double value) {
-    return new FitnessMax<T>(getIndividual(), getValue());
+    return new FitnessMax<T>(value);
   }
 
   @Override

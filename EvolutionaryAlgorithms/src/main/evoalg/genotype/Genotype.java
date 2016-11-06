@@ -1,21 +1,7 @@
 package evoalg.genotype;
 
-import java.util.List;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-
-@Getter
-@AllArgsConstructor
 public abstract class Genotype<T extends Genotype<T>> {
-
-  private final int genotypeId;
-  private final String name;
-
-  public Genotype(String name) {
-    this.name = name;
-    this.genotypeId = 0;
-  }
 
   /**
    * Creates deep copy of genotype object.
@@ -25,19 +11,16 @@ public abstract class Genotype<T extends Genotype<T>> {
   public abstract T copy();
 
   /**
-   * Immutable collection of crossover operators that will be used
-   * for current genotype representation.
+   * First initialization of data upon creation of the individual.
+   * Creates random data for specified genotype.
    *
-   * @return immutable collection of crossover operators
+   * @return genotype instance with random data
    */
-  public abstract List<CrossoverOp<T>> getCrossoverOp();
+  public abstract T initializeData();
 
-  /**
-   * Immutable collection of mutation operators that will be used
-   * for current genotype representation.
-   *
-   * @return immutable collection of mutation operators
-   */
-  public abstract List<MutationOp<T>> getMutationOp();
+  @Override
+  public abstract boolean equals(Object other);
+  @Override
+  public abstract int hashCode();
 
 }

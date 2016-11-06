@@ -15,9 +15,9 @@ public class FitnessMaxTest {
   @Test
   public void correctlyComparesFitnesses() {
     double expectedMaxFitnessValue = 10;
-    FitnessMax<BitString> fitness1 = new FitnessMax<BitString>(null, 5d);
-    FitnessMax<BitString> fitness2 = new FitnessMax<BitString>(null, expectedMaxFitnessValue);
-    FitnessMax<BitString> fitness3 = new FitnessMax<BitString>(null, 2d);
+    FitnessMax<BitString> fitness1 = new FitnessMax<BitString>(5d);
+    FitnessMax<BitString> fitness2 = new FitnessMax<BitString>(expectedMaxFitnessValue);
+    FitnessMax<BitString> fitness3 = new FitnessMax<BitString>(2d);
 
     List<Fitness<BitString>> list = Arrays.asList(fitness1, fitness2, fitness3);
     Collections.sort(list);

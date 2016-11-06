@@ -15,9 +15,9 @@ public class FitnessMinTest {
   @Test
   public void correctlyComparesFitnesses() {
     double expectedMinFitnessValue = 1;
-    FitnessMin<BitString> fitness1 = new FitnessMin<BitString>(null, 5d);
-    FitnessMin<BitString> fitness2 = new FitnessMin<BitString>(null, expectedMinFitnessValue);
-    FitnessMin<BitString> fitness3 = new FitnessMin<BitString>(null, 9d);
+    FitnessMin<BitString> fitness1 = new FitnessMin<BitString>(5d);
+    FitnessMin<BitString> fitness2 = new FitnessMin<BitString>(expectedMinFitnessValue);
+    FitnessMin<BitString> fitness3 = new FitnessMin<BitString>(9d);
 
     List<Fitness<BitString>> list = Arrays.asList(fitness1, fitness3, fitness2);
     Collections.sort(list);

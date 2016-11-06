@@ -1,6 +1,5 @@
 package evoalg.fitness;
 
-import evoalg.Individual;
 import evoalg.genotype.Genotype;
 
 /**
@@ -9,13 +8,13 @@ import evoalg.genotype.Genotype;
  */
 public class FitnessMin<T extends Genotype<T>> extends Fitness<T> {
 
-  public FitnessMin(Individual<T> individual, double value) {
-    super(individual, value);
+  public FitnessMin(double value) {
+    super(value);
   }
 
   @Override
   public FitnessMin<T> copy(double value) {
-    return new FitnessMin<T>(getIndividual(), getValue());
+    return new FitnessMin<T>(getValue());
   }
 
   @Override
@@ -26,11 +25,6 @@ public class FitnessMin<T extends Genotype<T>> extends Fitness<T> {
   @Override
   public int compareTo(Fitness<T> fitness) {
     return Double.compare(getValue(), fitness.getValue());
-  }
-
-  @Override
-  public String toString() {
-    return "FitnessMin [getValue()=" + getValue() + "]";
   }
 
 }

@@ -33,9 +33,9 @@ public class SelWorstOpTest {
     Individual<BitString> individual2 = Mockito.mock(Individual.class);
     Individual<BitString> individual3 = Mockito.mock(Individual.class);
 
-    Fitness<BitString> fitness1 = new FitnessMax<BitString>(individual1, 1d);
-    Fitness<BitString> fitness2 = new FitnessMax<BitString>(individual2, 2d);
-    Fitness<BitString> fitness3 = new FitnessMax<BitString>(individual3, 3d);
+    Fitness<BitString> fitness1 = new FitnessMax<BitString>(1d);
+    Fitness<BitString> fitness2 = new FitnessMax<BitString>(2d);
+    Fitness<BitString> fitness3 = new FitnessMax<BitString>(3d);
 
     when(individual1.getFitness()).thenReturn(fitness1);
     when(individual2.getFitness()).thenReturn(fitness2);
