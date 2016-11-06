@@ -53,7 +53,7 @@ public class SteadyStateTournament<T extends Genotype<T>> extends Algorithm<T> {
       children.add(child);
     }
 
-    return new Deme<>(deme.getIevaluate(), children);
+    return new Deme<>(children);
   }
 
   /**

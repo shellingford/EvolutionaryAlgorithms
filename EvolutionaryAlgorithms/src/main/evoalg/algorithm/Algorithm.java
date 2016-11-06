@@ -39,7 +39,7 @@ public abstract class Algorithm<T extends Genotype<T>> {
       demes.add(newDeme);
     }
 
-    return new Population<T>(population.getIevaluate(), demes.size(), demes);
+    return new Population<T>(demes.size(), demes);
   }
 
   protected Individual<T> evaluate(Individual<T> ind) {
