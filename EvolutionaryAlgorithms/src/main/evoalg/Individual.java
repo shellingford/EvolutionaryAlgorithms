@@ -5,6 +5,13 @@ import evoalg.fitness.Fitness;
 import evoalg.fitness.IEvaluate;
 import evoalg.genotype.Genotype;
 
+/**
+ * Class represents an individual inside a deme.
+ *
+ * Individuals has a certain genotype and fitness.
+ *
+ * @param <T> genotype
+ */
 @Getter
 public class Individual<T extends Genotype<T>> {
 
@@ -24,10 +31,20 @@ public class Individual<T extends Genotype<T>> {
     this.fitness = null;
   }
 
+  /**
+   * Deep copy of current individual.
+   *
+   * @return individual's deep copy.
+   */
   public Individual<T> copy() {
     return new Individual<T>(fitness.copy(), ievaluate, genotype.copy());
   }
 
+  /**
+   * Evaluates current individual and returns new instance of it with fitness value.
+   *
+   * @return evaluated individual
+   */
   public Individual<T> evaluate() {
     Fitness<T> newFitness = ievaluate.evaluate(this);
     return new Individual<T>(newFitness, ievaluate, genotype.copy());

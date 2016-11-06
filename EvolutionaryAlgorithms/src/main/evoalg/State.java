@@ -2,6 +2,7 @@ package evoalg;
 
 import lombok.Getter;
 import evoalg.algorithm.Algorithm;
+import evoalg.algorithm.IMilestone;
 import evoalg.fitness.IEvaluate;
 import evoalg.genotype.Genotype;
 
@@ -17,26 +18,38 @@ public class State<T extends Genotype<T>> {
   private Population<T> population;
   private final Algorithm<T> algorithm;
   private final T genotype;
-  private int generationNo;
+  private final IMilestone<T> milestone;
+  private final IEvaluate<T> evaluate;
 
-  public State(T genotype, Algorithm<T> algorithm, int populationSize, int demeSize, IEvaluate<T> ievaluate) {
+  public State(T genotype, Algorithm<T> algorithm, Population<T> population, IMilestone<T> milestone,
+      IEvaluate<T> evaluate) {
     this.genotype = genotype;
     this.algorithm = algorithm;
-    this.population = new Population<T>(ievaluate, genotype, populationSize, demeSize);
+    this.population = population;
+    this.milestone = milestone;
+    this.evaluate = evaluate;
   }
 
+  /**
+   * Starts algorithm, advances generations and checks for milestone.
+   */
   public void run() {
-    generationNo = 0;
     population = population.evaluate();
-
-    while (generationNo < 30) {
+    int generationNo = 0;
+    long duration = 0;
+    long start = System.currentTimeMillis();
+    while (!milestone.reached(population, generationNo, duration)) {
       population = algorithm.advanceGeneration(population);
       generationNo++;
+      duration = System.currentTimeMillis() - start;
     }
   }
 
+  /**
+   * Restarts algorithm.
+   */
   public void restart() {
-    population = population.reset(this.genotype);
+    population = population.reset(this.genotype, this.evaluate);
     run();
   }
 }

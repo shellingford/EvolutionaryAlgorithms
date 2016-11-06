@@ -1,6 +1,5 @@
 package evoalg.genotype;
 
-
 public abstract class Genotype<T extends Genotype<T>> {
 
   /**
