@@ -20,11 +20,19 @@ import evoalg.genotype.CrossoverOp;
 public class BitStringCrsUniform extends CrossoverOp<BitString> {
 
   @Override
-  public BitString mate(BitString ind1, BitString ind2) {
-    return new BitString(IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, ind1, ind2))
+  public BitString mate(BitString parent1, BitString parent2) {
+    return new BitString(IntStream.range(0, parent1.size()).mapToObj(i -> mapNewByte(i, parent1, parent2))
         .collect(Collectors.toList()));
   }
 
+  /**
+   * If parent's ith bits are the same then return that bit, otherwise return random bit.
+   *
+   * @param i position of the bit
+   * @param p1 parent
+   * @param p2 parent
+   * @return child's bit
+   */
   private byte mapNewByte(int i, BitString p1, BitString p2) {
     if (p1.get(i) == p2.get(i)) {
       return p1.get(i);

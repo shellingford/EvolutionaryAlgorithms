@@ -19,9 +19,8 @@ import evoalg.genotype.Mutation;
 import evoalg.genotype.MutationOp;
 import evoalg.genotype.bitstring.BitString;
 import evoalg.genotype.bitstring.BitStringCrsOnePoint;
-import evoalg.genotype.bitstring.BitStringMutSimple;
+import evoalg.genotype.bitstring.BitStringMutMix;
 import evoalg.selection.SelBestOp;
-import evoalg.selection.SelectionOperator;
 
 /**
  * Simple example for BitString genotype where the goal is to get
@@ -29,6 +28,8 @@ import evoalg.selection.SelectionOperator;
  */
 public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
   private static final long serialVersionUID = 1L;
+
+  private static final int BITSTRING_SIZE = 15;
 
   @Override
   public Fitness<BitString> evaluate(Individual<BitString> individual) {
@@ -50,6 +51,12 @@ public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
       System.out.println("Algorithm stopped after 5 seconds.");
       return true;
     }
+    //check if there is an individual within population with best possible fitness value
+    if (population.stream().flatMap(deme -> deme.stream())
+                  .filter(ind -> ind.getFitness().getValue() == BITSTRING_SIZE).count() > 0) {
+      System.out.println(String.format("Found best possible individual after %s generations!", generationNo));
+      return true;
+    }
     return false;
   }
 
@@ -57,13 +64,19 @@ public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
     State<BitString> state = setupState();
     state.run();
 
-    SelectionOperator<BitString> selector = new SelBestOp<BitString>();
+    SelBestOp<BitString> selector = new SelBestOp<BitString>();
     List<Individual<BitString>> allIndividuals = state.getPopulation().stream().flatMap(deme -> deme.stream()).collect(Collectors.toList());
     System.out.println("Best individual after last generation: " + selector.select(allIndividuals));
   }
 
+  /**
+   * Setups genotype, population, algorithm instance and then with that creates
+   * state instance that will be used to start everything.
+   *
+   * @return fully setup state instance
+   */
   private State<BitString> setupState() {
-    BitString genotype = new BitString(10);
+    BitString genotype = new BitString(BITSTRING_SIZE);
     Population<BitString> population = setupPopulation(genotype);
     Algorithm<BitString> algorithm = setupAlgorithm();
 
@@ -71,17 +84,28 @@ public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
     return state;
   }
 
+  /**
+   * Setup population and deme size and create population instance.
+   *
+   * @param genotype individual's genotype
+   * @return fully setup population
+   */
   private Population<BitString> setupPopulation(BitString genotype) {
     int populationSize = 5;
     int demeSize = 5;
     return new Population<>(this, genotype, populationSize, demeSize);
   }
 
+  /**
+   * Setup crossover and mutation operators, choose and create algorithm instance.
+   *
+   * @return fully setup algorithm instance
+   */
   private Algorithm<BitString> setupAlgorithm() {
     List<CrossoverOp<BitString>> crxOperators = Arrays.asList(new BitStringCrsOnePoint());
-    List<MutationOp<BitString>> mutOperators = Arrays.asList(new BitStringMutSimple());
+    List<MutationOp<BitString>> mutOperators = Arrays.asList(new BitStringMutMix());
     Crossover<BitString> crossover = new Crossover<>(crxOperators);
-    Mutation<BitString> mutation = new Mutation<>(mutOperators);
+    Mutation<BitString> mutation = new Mutation<>(mutOperators, 0.35d);
 
     int tournamentSize = 4;
     return new SteadyStateTournament<>(mutation, crossover, tournamentSize);

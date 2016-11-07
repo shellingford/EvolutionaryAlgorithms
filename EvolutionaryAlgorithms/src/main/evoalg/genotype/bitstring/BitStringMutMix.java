@@ -27,6 +27,15 @@ public class BitStringMutMix extends MutationOp<BitString> {
     return shuffleValuesBetweenPoints(genotype, point1, point2);
   }
 
+  /**
+   * Extracts sublist that is from point1 to point2 within genotype data, then shuffle that sublist
+   * and replace original bits within two points with shuffled ones.
+   *
+   * @param genotype individual's genotype
+   * @param point1 first random point
+   * @param point2 second random point
+   * @return new bitstring with shuffled data
+   */
   private BitString shuffleValuesBetweenPoints(BitString genotype, int point1, int point2) {
     List<Byte> dataBetweenPoints = new ArrayList<>(genotype.getData().subList(point1, point2 + 1));
     Collections.shuffle(dataBetweenPoints);
@@ -37,6 +46,14 @@ public class BitStringMutMix extends MutationOp<BitString> {
     return genotype.replaceData(newData);
   }
 
+  /**
+   * Sets new bitstring value of bit i with a value from dataBetweenPoints.
+   *
+   * @param i bit index which value will be changed
+   * @param point1 first random point from where we change bits
+   * @param data original bitstring data
+   * @param dataBetweenPoints shuffled data between two points
+   */
   private void setNewValues(int i, int point1, List<Byte> data, List<Byte> dataBetweenPoints) {
     data.set(i, dataBetweenPoints.get(i - point1));
   }

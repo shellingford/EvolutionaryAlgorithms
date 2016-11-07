@@ -1,11 +1,10 @@
 package evoalg.genotype;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
-import lombok.Getter;
-
+import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 import evoalg.Individual;
@@ -19,56 +18,36 @@ import evoalg.Individual;
 public class Mutation<T extends Genotype<T>> {
 
   private final List<MutationOp<T>> operators;
-  private final List<Double> opProb;
-  @Getter
   private final Random random;
-  private double indMutProb;
+  private final double indMutProb;
 
-  public Mutation(List<MutationOp<T>> operators) {
+  public Mutation(List<MutationOp<T>> operators, double indMutProb) {
+    Preconditions.checkArgument(0d <= indMutProb && indMutProb <= 1d, "Mutation probability must be in range [0, 1]");
     this.operators = operators;
     this.random = new Random();
-    opProb = new ArrayList<>();
-
-    initialize();
+    this.indMutProb = indMutProb;
   }
 
-  private void initialize() {
-    int brojOperatora = operators.size();
-
-    opProb.add(operators.get(0).getProbability());
-
-    for (int i = 1; i < brojOperatora; i++) {
-      opProb.add(opProb.get(i - 1) + operators.get(i).getProbability());
-    }
-
-    if (opProb.get(brojOperatora - 1) == 0) {
-      opProb.set(0, -1.);
-    }
-    else {
-      if (opProb.get(brojOperatora - 1) != 1) {
-        double normal = opProb.get(brojOperatora - 1);
-        for (int i = 0; i < opProb.size(); i++) {
-          opProb.set(i, opProb.get(i) / normal);
-        }
-      }
-    }
-  }
-
+  /**
+   * Tries to mutate every individual from the pool.
+   *
+   * @param pool pool of individuals
+   * @return pool with mutated individuals
+   */
   public List<Individual<T>> mutation(List<Individual<T>> pool) {
-    List<Individual<T>> poolWithMutations = new ArrayList<>();
-    for (int i = 0; i < pool.size(); i++) {
-      Individual<T> currentIndividual = pool.get(i);
-      if (random.nextDouble() <= indMutProb) {
-        currentIndividual = mutate(pool.get(i));
-      }
-      poolWithMutations.add(currentIndividual);
-    }
-    return poolWithMutations;
+    return pool.stream().map(ind -> mutate(ind)).collect(Collectors.toList());
   }
 
+  /**
+   * Mutates specified individual with random mutation operator and random probability.
+   * If mutation will not happen then original individual is returned.
+   *
+   * @param ind individual that might be mutated
+   * @return mutated or original individual.
+   */
   public Individual<T> mutate(Individual<T> ind) {
-    int randOperatorIndex = random.nextInt(operators.size());
     if (random.nextDouble() <= indMutProb) {
+      int randOperatorIndex = random.nextInt(operators.size());
       T mutatedGenotype = operators.get(randOperatorIndex).mutate(ind.getGenotype());
       return new Individual<T>(ind.getIevaluate(), mutatedGenotype);
     }

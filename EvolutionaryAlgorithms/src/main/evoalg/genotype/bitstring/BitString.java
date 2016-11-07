@@ -9,7 +9,7 @@ import com.google.common.collect.ImmutableList;
 import evoalg.genotype.Genotype;
 
 /**
- *
+ * Bitstring genotype, where data is list of bytes.
  */
 public class BitString extends Genotype<BitString> {
 
@@ -28,6 +28,11 @@ public class BitString extends Genotype<BitString> {
     this.data = data;
   }
 
+  /**
+   * Initializes data to random bits.
+   *
+   * @param nBits number of data bits
+   */
   private void initialize(int nBits) {
     Random random = new Random();
     for (int i = 0; i < nBits; i++) {
@@ -56,14 +61,30 @@ public class BitString extends Genotype<BitString> {
     return new BitString(new ArrayList<Byte>(newData));
   }
 
+  /**
+   * Get byte with specified index.
+   *
+   * @param index position of the byte
+   * @return byte at specified position
+   */
   public byte get(int index) {
     return data.get(index);
   }
 
+  /**
+   * Bitstring data size.
+   *
+   * @return bitstring data size
+   */
   public int size() {
     return data.size();
   }
 
+  /**
+   * Immutable list of bitstring's data.
+   *
+   * @return immutable list of data
+   */
   public List<Byte> getData() {
     return ImmutableList.copyOf(data);
   }

@@ -19,7 +19,6 @@ import evoalg.genotype.Mutation;
 public abstract class Algorithm<T extends Genotype<T>> {
 
   private final Crossover<T> crossover;
-
   private final Mutation<T> mutation;
 
   public Algorithm(Mutation<T> mutation, Crossover<T> crossover) {

@@ -33,4 +33,33 @@ public abstract class Fitness<T extends Genotype<T>> implements Comparable<Fitne
    */
   public abstract Fitness<T> copy(double value);
 
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    long temp;
+    temp = Double.doubleToLongBits(value);
+    result = prime * result + (int) (temp ^ (temp >>> 32));
+    return result;
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    if (this == obj) {
+      return true;
+    }
+    if (obj == null) {
+      return false;
+    }
+    if (getClass() != obj.getClass()) {
+      return false;
+    }
+    @SuppressWarnings("unchecked")
+    Fitness<T> other = (Fitness<T>) obj;
+    if (Double.doubleToLongBits(value) != Double.doubleToLongBits(other.value)) {
+      return false;
+    }
+    return true;
+  }
+
 }

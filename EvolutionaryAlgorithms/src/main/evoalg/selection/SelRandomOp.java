@@ -6,7 +6,12 @@ import java.util.Random;
 import evoalg.Individual;
 import evoalg.genotype.Genotype;
 
-public class SelRandomOp<T extends Genotype<T>> extends SelectionOperator<T> {
+/**
+ * Implementation of SelectionOperator that selects a random individual from the pool.
+ *
+ * @param <T> genotype
+ */
+public class SelRandomOp<T extends Genotype<T>> implements ISelectionOperator<T> {
 
   private Random random;
 

@@ -21,19 +21,29 @@ import evoalg.genotype.CrossoverOp;
 public class BitStringCrsOnePoint extends CrossoverOp<BitString> {
 
   @Override
-  public BitString mate(BitString ind1, BitString ind2) {
-    int point = getRandom().nextInt(ind1.size());
+  public BitString mate(BitString parent1, BitString parent2) {
+    int point = getRandom().nextInt(parent1.size());
 
     if (getRandom().nextBoolean()) {
-      return new BitString(IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, point, ind1, ind2))
+      return new BitString(IntStream.range(0, parent1.size()).mapToObj(i -> mapNewByte(i, point, parent1, parent2))
           .collect(Collectors.toList()));
     }
     else {
-      return new BitString(IntStream.range(0, ind1.size()).mapToObj(i -> mapNewByte(i, point, ind2, ind1))
+      return new BitString(IntStream.range(0, parent1.size()).mapToObj(i -> mapNewByte(i, point, parent2, parent1))
           .collect(Collectors.toList()));
     }
   }
 
+  /**
+   * If bit index is before specified point then return first parent's bit, otherwise
+   * return second parent's bit.
+   *
+   * @param i current index of a bit
+   * @param point specified point where we check which parent's bit we should take
+   * @param p1 parent
+   * @param p2 parent
+   * @return child's bit
+   */
   private byte mapNewByte(int i, int point, BitString p1, BitString p2) {
     if (i < point) {
       return p1.get(i);

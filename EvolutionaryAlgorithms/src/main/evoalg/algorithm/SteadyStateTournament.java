@@ -12,7 +12,7 @@ import evoalg.genotype.Genotype;
 import evoalg.genotype.Mutation;
 import evoalg.selection.SelRandomOp;
 import evoalg.selection.SelWorstOp;
-import evoalg.selection.SelectionOperator;
+import evoalg.selection.ISelectionOperator;
 
 /**
  * Steady-state tournament individual selection.
@@ -22,8 +22,8 @@ import evoalg.selection.SelectionOperator;
 public class SteadyStateTournament<T extends Genotype<T>> extends Algorithm<T> {
 
   private final int tournamentSize;
-  private final SelectionOperator<T> selRandomOp;
-  private final SelectionOperator<T> selWorstOp;
+  private final ISelectionOperator<T> selRandomOp;
+  private final ISelectionOperator<T> selWorstOp;
 
   public SteadyStateTournament(Mutation<T> mutation, Crossover<T> crossover, int tournamentSize) {
     super(mutation, crossover);
