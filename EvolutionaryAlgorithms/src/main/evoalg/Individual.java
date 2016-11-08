@@ -37,7 +37,12 @@ public class Individual<T extends Genotype<T>> {
    * @return individual's deep copy.
    */
   public Individual<T> copy() {
-    return new Individual<T>(fitness.copy(), ievaluate, genotype.copy());
+    if (fitness != null) {
+      return new Individual<T>(fitness.copy(), ievaluate, genotype.copy());
+    }
+    else {
+      return new Individual<T>(ievaluate, genotype.copy());
+    }
   }
 
   /**
@@ -51,14 +56,20 @@ public class Individual<T extends Genotype<T>> {
   }
 
   @Override
+  public String toString() {
+    return "Individual [genotype=" + genotype + " => fitness value:" + (getFitness() != null ? getFitness().getValue() + "" : "none") + "]";
+  }
+
+  @Override
   public int hashCode() {
     final int prime = 31;
     int result = 1;
+    result = prime * result + ((fitness == null) ? 0 : fitness.hashCode());
     result = prime * result + ((genotype == null) ? 0 : genotype.hashCode());
     return result;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings("rawtypes")
   @Override
   public boolean equals(Object obj) {
     if (this == obj) {
@@ -70,7 +81,15 @@ public class Individual<T extends Genotype<T>> {
     if (getClass() != obj.getClass()) {
       return false;
     }
-    Individual<T> other = (Individual<T>) obj;
+    Individual other = (Individual) obj;
+    if (fitness == null) {
+      if (other.fitness != null) {
+        return false;
+      }
+    }
+    else if (!fitness.equals(other.fitness)) {
+      return false;
+    }
     if (genotype == null) {
       if (other.genotype != null) {
         return false;
@@ -80,10 +99,5 @@ public class Individual<T extends Genotype<T>> {
       return false;
     }
     return true;
-  }
-
-  @Override
-  public String toString() {
-    return "Individual [genotype=" + genotype + " => fitness value:" + (getFitness() != null ? getFitness().getValue() + "" : "none") + "]";
   }
 }

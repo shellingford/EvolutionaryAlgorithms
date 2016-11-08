@@ -1,38 +1,35 @@
 package evoalg;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import lombok.Getter;
+
+import com.google.common.collect.ImmutableList;
+
 import evoalg.fitness.IEvaluate;
 import evoalg.genotype.Genotype;
 
 /**
- * Population represents a collection of Demes which is why it extends ArrayList
- * of Demes.
+ * Population represents a collection of {@link Deme}.
  *
  * @param <T> genotype
  */
-@Getter
-public class Population<T extends Genotype<T>> extends ArrayList<Deme<T>> {
-
-  private static final long serialVersionUID = 1L;
+public class Population<T extends Genotype<T>> {
 
   private final int demeSize;
+  @Getter
+  private final List<Deme<T>> demes;
 
   public Population(IEvaluate<T> ievaluate, T genotype, int populationSize, int demeSize) {
-    super(populationSize);
     this.demeSize = demeSize;
-
-    initialize(populationSize, genotype, ievaluate);
+    demes = ImmutableList.copyOf(initialize(populationSize, genotype, ievaluate));
   }
 
   public Population(int demeSize, List<Deme<T>> demes) {
-    super(demes.size());
     this.demeSize = demeSize;
-
-    addAll(demes);
+    this.demes = ImmutableList.copyOf(demes);
   }
 
   /**
@@ -42,11 +39,9 @@ public class Population<T extends Genotype<T>> extends ArrayList<Deme<T>> {
    * @param genotype individual's genotype
    * @param ievaluate evaluation function
    */
-  private void initialize(int populationSize, T genotype, IEvaluate<T> ievaluate) {
-    for (int i = 0; i < populationSize; i++) {
-      Deme<T> deme = new Deme<T>(ievaluate, demeSize, genotype);
-      add(deme);
-    }
+  private List<Deme<T>> initialize(int populationSize, T genotype, IEvaluate<T> ievaluate) {
+    return IntStream.range(0, populationSize).mapToObj(i -> new Deme<T>(ievaluate, demeSize, genotype))
+        .collect(Collectors.toList());
   }
 
   /**
@@ -66,8 +61,12 @@ public class Population<T extends Genotype<T>> extends ArrayList<Deme<T>> {
    * @return updated population
    */
   public Population<T> evaluate() {
-    List<Deme<T>> evaluatedDemes = this.stream().map(deme -> deme.evaluate()).collect(Collectors.toList());
+    List<Deme<T>> evaluatedDemes = demes.stream().map(deme -> deme.evaluate()).collect(Collectors.toList());
     return new Population<>(demeSize, evaluatedDemes);
+  }
+
+  public int size() {
+    return demes.size();
   }
 
 }

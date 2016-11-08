@@ -33,7 +33,7 @@ public abstract class Algorithm<T extends Genotype<T>> {
   public Population<T> advanceGeneration(Population<T> population) {
     List<Deme<T>> demes = new ArrayList<>();
     for (int iDeme = 0; iDeme < population.size(); iDeme++) {
-      Deme<T> activeDeme = population.get(iDeme);
+      Deme<T> activeDeme = population.getDemes().get(iDeme);
       Deme<T> newDeme = advanceGeneration(activeDeme);
       demes.add(newDeme);
     }

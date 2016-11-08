@@ -20,12 +20,11 @@ public class BitString extends Genotype<BitString> {
   }
 
   public BitString(int nBits) {
-    data = new ArrayList<>(nBits);
-    initialize(nBits);
+    this.data = ImmutableList.copyOf(initialize(nBits));
   }
 
   public BitString(List<Byte> data) {
-    this.data = data;
+    this.data = ImmutableList.copyOf(data);
   }
 
   /**
@@ -33,11 +32,13 @@ public class BitString extends Genotype<BitString> {
    *
    * @param nBits number of data bits
    */
-  private void initialize(int nBits) {
+  private List<Byte> initialize(int nBits) {
+    List<Byte> data = new ArrayList<>(nBits);
     Random random = new Random();
     for (int i = 0; i < nBits; i++) {
       data.add((byte) random.nextInt(2));
     }
+    return data;
   }
 
   @Override
@@ -52,13 +53,13 @@ public class BitString extends Genotype<BitString> {
 
   /**
    * Creates new instance of BitString object that is copy of current one but
-   * with new bits.
+   * with newData bits.
    *
    * @param newData new bits
    * @return copy of current instance of BitString with new bits
    */
   public BitString replaceData(List<Byte> newData) {
-    return new BitString(new ArrayList<Byte>(newData));
+    return new BitString(newData);
   }
 
   /**
@@ -86,7 +87,7 @@ public class BitString extends Genotype<BitString> {
    * @return immutable list of data
    */
   public List<Byte> getData() {
-    return ImmutableList.copyOf(data);
+    return data;
   }
 
   @Override

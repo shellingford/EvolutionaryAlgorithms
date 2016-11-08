@@ -10,9 +10,9 @@ import evoalg.Individual;
 import evoalg.genotype.Crossover;
 import evoalg.genotype.Genotype;
 import evoalg.genotype.Mutation;
+import evoalg.selection.ISelectionOperator;
 import evoalg.selection.SelRandomOp;
 import evoalg.selection.SelWorstOp;
-import evoalg.selection.ISelectionOperator;
 
 /**
  * Steady-state tournament individual selection.
@@ -63,7 +63,8 @@ public class SteadyStateTournament<T extends Genotype<T>> extends Algorithm<T> {
    * @return nTournament random individuals
    */
   private List<Individual<T>> selectIndividuals(Deme<T> deme) {
-    return IntStream.range(0, tournamentSize).mapToObj(i -> selRandomOp.select(deme)).collect(Collectors.toList());
+    return IntStream.range(0, tournamentSize).mapToObj(i -> selRandomOp.select(deme.getIndividuals()))
+                    .collect(Collectors.toList());
   }
 
   /**

@@ -23,7 +23,7 @@ public class Mutation<T extends Genotype<T>> {
 
   public Mutation(List<MutationOp<T>> operators, double indMutProb) {
     Preconditions.checkArgument(0d <= indMutProb && indMutProb <= 1d, "Mutation probability must be in range [0, 1]");
-    this.operators = operators;
+    this.operators = ImmutableList.copyOf(operators);
     this.random = new Random();
     this.indMutProb = indMutProb;
   }
@@ -63,7 +63,7 @@ public class Mutation<T extends Genotype<T>> {
    * @return immutable collection of mutation operators
    */
   public List<MutationOp<T>> getMutationOp() {
-    return ImmutableList.copyOf(operators);
+    return operators;
   }
 
 }

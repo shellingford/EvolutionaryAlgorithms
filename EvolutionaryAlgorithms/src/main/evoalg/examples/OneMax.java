@@ -52,7 +52,7 @@ public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
       return true;
     }
     //check if there is an individual within population with best possible fitness value
-    if (population.stream().flatMap(deme -> deme.stream())
+    if (population.getDemes().stream().flatMap(deme -> deme.getIndividuals().stream())
                   .filter(ind -> ind.getFitness().getValue() == BITSTRING_SIZE).count() > 0) {
       System.out.println(String.format("Found best possible individual after %s generations!", generationNo));
       return true;
@@ -65,7 +65,8 @@ public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
     state.run();
 
     SelBestOp<BitString> selector = new SelBestOp<BitString>();
-    List<Individual<BitString>> allIndividuals = state.getPopulation().stream().flatMap(deme -> deme.stream()).collect(Collectors.toList());
+    List<Individual<BitString>> allIndividuals =
+        state.getPopulation().getDemes().stream().flatMap(deme -> deme.getIndividuals().stream()).collect(Collectors.toList());
     System.out.println("Best individual after last generation: " + selector.select(allIndividuals));
   }
 

@@ -19,7 +19,7 @@ public class Crossover<T extends Genotype<T>> {
   private final Random random;
 
   public Crossover(List<CrossoverOp<T>> operators) {
-    this.operators = operators;
+    this.operators = ImmutableList.copyOf(operators);
     this.random = new Random();
   }
 
@@ -43,6 +43,6 @@ public class Crossover<T extends Genotype<T>> {
    * @return immutable collection of crossover operators
    */
   public List<CrossoverOp<T>> getCrossoverOp() {
-    return ImmutableList.copyOf(operators);
+    return operators;
   }
 }
