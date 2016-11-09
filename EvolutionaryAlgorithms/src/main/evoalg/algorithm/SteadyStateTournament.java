@@ -16,6 +16,11 @@ import evoalg.selection.SelWorstOp;
 
 /**
  * Steady-state tournament individual selection.
+ * Algorithm is as follows:
+ * 1) select randomly tournamentSize individuals from deme
+ * 2) remove worst individual from those random ones
+ * 3) mate first two individuals from the remaining ones to create a child
+ * 4) repeat this N number of times, where N is deme size
  *
  * @param <T> genotype
  */
@@ -25,23 +30,22 @@ public class SteadyStateTournament<T extends Genotype<T>> extends Algorithm<T> {
   private final ISelectionOperator<T> selRandomOp;
   private final ISelectionOperator<T> selWorstOp;
 
-  public SteadyStateTournament(Mutation<T> mutation, Crossover<T> crossover, int tournamentSize) {
+  public SteadyStateTournament(Mutation<T> mutation, Crossover<T> crossover, int tournamentSize,
+      SelRandomOp<T> selRandomOp, SelWorstOp<T> selWorstOp) {
     super(mutation, crossover);
-    this.tournamentSize = tournamentSize;
-    selRandomOp = new SelRandomOp<T>();
-    selWorstOp = new SelWorstOp<T>();
-  }
-
-  @Override
-  public void initialize() {
     if (tournamentSize < 3) {
-      String msg = "Error: SteadyStateTournament algorithm requires minimum tournament size of 3!";
-      throw new IllegalArgumentException(msg);
+      throw new IllegalArgumentException("Error: SteadyStateTournament algorithm requires minimum tournament size of 3!");
     }
+    this.tournamentSize = tournamentSize;
+    this.selRandomOp = selRandomOp;
+    this.selWorstOp = selWorstOp;
   }
 
   @Override
   public Deme<T> advanceGeneration(Deme<T> deme) {
+    if (deme.size() < 3) {
+      throw new IllegalArgumentException("Error: SteadyStateTournament algorithm requires minimum deme size of 3!");
+    }
     List<Individual<T>> tournament = null;
     List<Individual<T>> children = new ArrayList<>();
 

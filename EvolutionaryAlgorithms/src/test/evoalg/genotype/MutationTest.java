@@ -64,7 +64,7 @@ public class MutationTest {
     List<MutationOp<BitString>> operators = Arrays.asList(mutSimple);
     Mutation<BitString> mutation = new Mutation<BitString>(operators, 1d);
 
-    List<Individual<BitString>> mutatedIndividuals = mutation.mutation(Arrays.asList(ind1, ind2));
+    List<Individual<BitString>> mutatedIndividuals = mutation.mutate(Arrays.asList(ind1, ind2));
 
     assertTrue(!ind1.equals(mutatedIndividuals.get(0)));
     assertTrue(!ind2.equals(mutatedIndividuals.get(1)));

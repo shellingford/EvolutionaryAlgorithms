@@ -34,7 +34,7 @@ public class Mutation<T extends Genotype<T>> {
    * @param pool pool of individuals
    * @return pool with mutated individuals
    */
-  public List<Individual<T>> mutation(List<Individual<T>> pool) {
+  public List<Individual<T>> mutate(List<Individual<T>> pool) {
     return pool.stream().map(ind -> mutate(ind)).collect(Collectors.toList());
   }
 

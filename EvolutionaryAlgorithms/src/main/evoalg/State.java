@@ -20,14 +20,16 @@ public class State<T extends Genotype<T>> {
   private final T genotype;
   private final IMilestone<T> milestone;
   private final IEvaluate<T> evaluate;
+  private final SystemTime systemTime;
 
   public State(T genotype, Algorithm<T> algorithm, Population<T> population, IMilestone<T> milestone,
-      IEvaluate<T> evaluate) {
+      IEvaluate<T> evaluate, SystemTime systemTime) {
     this.genotype = genotype;
     this.algorithm = algorithm;
     this.population = population;
     this.milestone = milestone;
     this.evaluate = evaluate;
+    this.systemTime = systemTime;
   }
 
   /**
@@ -37,11 +39,11 @@ public class State<T extends Genotype<T>> {
     population = population.evaluate();
     int generationNo = 0;
     long duration = 0;
-    long start = System.currentTimeMillis();
+    long start = systemTime.currentTimeMillis();
     while (!milestone.reached(population, generationNo, duration)) {
       population = algorithm.advanceGeneration(population);
       generationNo++;
-      duration = System.currentTimeMillis() - start;
+      duration = systemTime.currentTimeMillis() - start;
     }
   }
 

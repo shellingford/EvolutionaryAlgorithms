@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import evoalg.Individual;
 import evoalg.Population;
 import evoalg.State;
+import evoalg.SystemTime;
 import evoalg.algorithm.Algorithm;
 import evoalg.algorithm.IMilestone;
 import evoalg.algorithm.SteadyStateTournament;
@@ -21,6 +22,8 @@ import evoalg.genotype.bitstring.BitString;
 import evoalg.genotype.bitstring.BitStringCrsOnePoint;
 import evoalg.genotype.bitstring.BitStringMutMix;
 import evoalg.selection.SelBestOp;
+import evoalg.selection.SelRandomOp;
+import evoalg.selection.SelWorstOp;
 
 /**
  * Simple example for BitString genotype where the goal is to get
@@ -81,7 +84,7 @@ public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
     Population<BitString> population = setupPopulation(genotype);
     Algorithm<BitString> algorithm = setupAlgorithm();
 
-    State<BitString> state = new State<>(genotype, algorithm, population, this, this);
+    State<BitString> state = new State<>(genotype, algorithm, population, this, this, new SystemTime());
     return state;
   }
 
@@ -109,7 +112,8 @@ public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
     Mutation<BitString> mutation = new Mutation<>(mutOperators, 0.35d);
 
     int tournamentSize = 4;
-    return new SteadyStateTournament<>(mutation, crossover, tournamentSize);
+    return new SteadyStateTournament<>(mutation, crossover, tournamentSize, new SelRandomOp<BitString>(),
+          new SelWorstOp<BitString>());
   }
 
   public static void main(String[] args) {
