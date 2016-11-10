@@ -24,8 +24,8 @@ public abstract class MutationOp<T extends Genotype<T>> {
   /**
    * Mutates individual and returns it.
    *
-   * @param ind individual that will be mutated
+   * @param individual individual that will be mutated
    * @return mutated individual
    */
-  public abstract T mutate(T ind);
+  public abstract T mutate(T individual);
 }

@@ -1,18 +1,23 @@
 package evoalg.genotype.bitstring;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import lombok.Getter;
 
 import com.google.common.collect.ImmutableList;
 
 import evoalg.genotype.Genotype;
 
 /**
- * Bitstring genotype, where data is list of bytes.
+ * Bitstring genotype, where data is list of bytes, 0 or 1.
+ * For example: [0, 1, 1, 1, 0, 1, 0]
  */
 public class BitString extends Genotype<BitString> {
 
+  @Getter
   private final List<Byte> data;
 
   public BitString() {
@@ -33,12 +38,8 @@ public class BitString extends Genotype<BitString> {
    * @param nBits number of data bits
    */
   private List<Byte> initialize(int nBits) {
-    List<Byte> data = new ArrayList<>(nBits);
     Random random = new Random();
-    for (int i = 0; i < nBits; i++) {
-      data.add((byte) random.nextInt(2));
-    }
-    return data;
+    return IntStream.range(0, nBits).mapToObj(i -> (byte) random.nextInt(2)).collect(Collectors.toList());
   }
 
   @Override
@@ -79,15 +80,6 @@ public class BitString extends Genotype<BitString> {
    */
   public int size() {
     return data.size();
-  }
-
-  /**
-   * Immutable list of bitstring's data.
-   *
-   * @return immutable list of data
-   */
-  public List<Byte> getData() {
-    return data;
   }
 
   @Override
