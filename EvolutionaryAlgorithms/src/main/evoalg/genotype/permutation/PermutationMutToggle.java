@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import evoalg.genotype.MutationOp;
+import evoalg.random.IRandomness;
 
 /**
  * Simple toggle mutation for permutation genotype.
@@ -18,6 +19,10 @@ import evoalg.genotype.MutationOp;
  *  Mutated:    1 6 3 4 5 2
  */
 public class PermutationMutToggle extends MutationOp<Permutation> {
+
+  public PermutationMutToggle(IRandomness random) {
+    super(random);
+  }
 
   @Override
   public Permutation mutate(Permutation individual) {

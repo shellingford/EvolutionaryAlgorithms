@@ -21,6 +21,7 @@ import evoalg.genotype.MutationOp;
 import evoalg.genotype.bitstring.BitString;
 import evoalg.genotype.bitstring.BitStringCrsOnePoint;
 import evoalg.genotype.bitstring.BitStringMutMix;
+import evoalg.random.DefaultRandom;
 import evoalg.selection.SelBestOp;
 import evoalg.selection.SelRandomOp;
 import evoalg.selection.SelWorstOp;
@@ -106,10 +107,10 @@ public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
    * @return fully setup algorithm instance
    */
   private Algorithm<BitString> setupAlgorithm() {
-    List<CrossoverOp<BitString>> crxOperators = Arrays.asList(new BitStringCrsOnePoint());
-    List<MutationOp<BitString>> mutOperators = Arrays.asList(new BitStringMutMix());
-    Crossover<BitString> crossover = new Crossover<>(crxOperators);
-    Mutation<BitString> mutation = new Mutation<>(mutOperators, 0.35d);
+    List<CrossoverOp<BitString>> crxOperators = Arrays.asList(new BitStringCrsOnePoint(new DefaultRandom()));
+    List<MutationOp<BitString>> mutOperators = Arrays.asList(new BitStringMutMix(new DefaultRandom()));
+    Crossover<BitString> crossover = new Crossover<>(crxOperators, new DefaultRandom());
+    Mutation<BitString> mutation = new Mutation<>(mutOperators, 0.35d, new DefaultRandom());
 
     int tournamentSize = 4;
     return new SteadyStateTournament<>(mutation, crossover, tournamentSize, new SelRandomOp<BitString>(),

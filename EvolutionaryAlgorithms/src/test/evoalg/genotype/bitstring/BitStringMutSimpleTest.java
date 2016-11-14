@@ -8,14 +8,19 @@ import java.util.stream.IntStream;
 
 import org.junit.Test;
 
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
+
 public class BitStringMutSimpleTest {
+
+  private final IRandomness random = new DefaultRandom();
 
   @Test
   public void mutatesCorrectly() {
     List<Byte> data = IntStream.range(0, 5).mapToObj(i -> (byte) 0).collect(Collectors.toList());
     BitString genotype = new BitString(data);
 
-    BitStringMutSimple mutOp = new BitStringMutSimple();
+    BitStringMutSimple mutOp = new BitStringMutSimple(random);
     BitString mutatedGenotype = mutOp.mutate(genotype);
 
     long countMutatedBits = IntStream.range(0, genotype.size())

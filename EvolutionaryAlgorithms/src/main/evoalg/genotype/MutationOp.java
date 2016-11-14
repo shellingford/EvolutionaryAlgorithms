@@ -1,8 +1,7 @@
 package evoalg.genotype;
 
-import java.util.Random;
-
 import lombok.Getter;
+import evoalg.random.IRandomness;
 
 /**
  * Abstract class for mutation operator.
@@ -15,10 +14,10 @@ import lombok.Getter;
 @Getter
 public abstract class MutationOp<T extends Genotype<T>> {
 
-  private Random random;
+  private final IRandomness random;
 
-  public MutationOp() {
-    this.random = new Random();
+  public MutationOp(IRandomness random) {
+    this.random = random;
   }
 
   /**

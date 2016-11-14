@@ -7,12 +7,17 @@ import java.util.stream.IntStream;
 
 import org.junit.Test;
 
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
+
 public class PermutationMutToggleTest {
+
+  private final IRandomness random = new DefaultRandom();
 
   @Test
   public void correctlyMutates() {
     Permutation individual = new Permutation(5);
-    PermutationMutToggle mutation = new PermutationMutToggle();
+    PermutationMutToggle mutation = new PermutationMutToggle(random);
 
     Permutation mutated = mutation.mutate(individual);
     //as we only replace two numbers, difference must be exactly 2 numbers

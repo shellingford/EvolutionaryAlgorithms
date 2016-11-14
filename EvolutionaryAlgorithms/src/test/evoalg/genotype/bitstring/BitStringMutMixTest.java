@@ -10,7 +10,12 @@ import java.util.stream.IntStream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
+
 public class BitStringMutMixTest {
+
+  private final IRandomness random = new DefaultRandom();
 
   @Test
   public void mutatesCorrectly() {
@@ -18,7 +23,7 @@ public class BitStringMutMixTest {
     List<Byte> expectedMutatedData = Arrays.asList((byte) 1, (byte) 0);
     BitString genotype = new BitString(data);
 
-    BitStringMutMix mutOp = new BitStringMutMix();
+    BitStringMutMix mutOp = new BitStringMutMix(random);
 
     //as mutation operator will change at least two bits, when we have only two bits it means we expect
     //to get reverse list of bits, but as it is random shuffle it can happen that we get the same list
@@ -41,7 +46,7 @@ public class BitStringMutMixTest {
     int expected0Count = 3;
     int expected1Count = 4;
 
-    BitStringMutMix mutOp = new BitStringMutMix();
+    BitStringMutMix mutOp = new BitStringMutMix(random);
     BitString mutatedGenotype = mutOp.mutate(genotype);
 
     checkCounts(expected0Count, expected1Count, mutatedGenotype.getData());

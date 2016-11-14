@@ -17,6 +17,8 @@ import evoalg.fitness.IEvaluate;
 import evoalg.genotype.bitstring.BitString;
 import evoalg.genotype.bitstring.BitStringMutMix;
 import evoalg.genotype.bitstring.BitStringMutSimple;
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
 
 public class MutationTest {
 
@@ -24,10 +26,12 @@ public class MutationTest {
   private final IEvaluate<BitString> ievaluate = Mockito.mock(IEvaluate.class);
   private final BitString genotype = new BitString(7);
 
+  private final IRandomness random = new DefaultRandom();
+
   @Test
   public void mutationOperatorListIsImmutable() {
-    List<MutationOp<BitString>> operators = Arrays.asList(new BitStringMutSimple());
-    Mutation<BitString> mutation = new Mutation<BitString>(operators, 0d);
+    List<MutationOp<BitString>> operators = Arrays.asList(new BitStringMutSimple(random));
+    Mutation<BitString> mutation = new Mutation<BitString>(operators, 0d, random);
     assertTrue(mutation.getMutationOp() instanceof ImmutableList);
   }
 
@@ -37,7 +41,7 @@ public class MutationTest {
     Individual<BitString> expectedMutatedInd = new Individual<BitString>(ievaluate, genotype);
 
     List<MutationOp<BitString>> operators = setupOperators(ind, expectedMutatedInd);
-    Mutation<BitString> mutation = new Mutation<BitString>(operators, 1d);
+    Mutation<BitString> mutation = new Mutation<BitString>(operators, 1d, random);
 
     Individual<BitString> mutated = mutation.mutate(ind);
 
@@ -59,10 +63,10 @@ public class MutationTest {
     Individual<BitString> ind1 = new Individual<BitString>(ievaluate, genotype.initializeData());
     Individual<BitString> ind2 = new Individual<BitString>(ievaluate, genotype.initializeData());
 
-    BitStringMutSimple mutSimple = new BitStringMutSimple();
+    BitStringMutSimple mutSimple = new BitStringMutSimple(random);
 
     List<MutationOp<BitString>> operators = Arrays.asList(mutSimple);
-    Mutation<BitString> mutation = new Mutation<BitString>(operators, 1d);
+    Mutation<BitString> mutation = new Mutation<BitString>(operators, 1d, random);
 
     List<Individual<BitString>> mutatedIndividuals = mutation.mutate(Arrays.asList(ind1, ind2));
 
@@ -76,7 +80,7 @@ public class MutationTest {
     Individual<BitString> expectedMutatedInd = new Individual<BitString>(ievaluate, genotype);
 
     List<MutationOp<BitString>> operators = setupOperators(ind, expectedMutatedInd);
-    Mutation<BitString> mutation = new Mutation<BitString>(operators, 0d);
+    Mutation<BitString> mutation = new Mutation<BitString>(operators, 0d, random);
 
     Individual<BitString> mutated = mutation.mutate(ind);
 

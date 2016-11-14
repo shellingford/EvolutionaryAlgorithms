@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import evoalg.genotype.MutationOp;
+import evoalg.random.IRandomness;
 
 /**
  * Mix bitstring mutation operator.
@@ -18,6 +19,10 @@ import evoalg.genotype.MutationOp;
  *  Mutated:   01 | 010 | 11
  */
 public class BitStringMutMix extends MutationOp<BitString> {
+
+  public BitStringMutMix(IRandomness random) {
+    super(random);
+  }
 
   @Override
   public BitString mutate(BitString genotype) {

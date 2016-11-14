@@ -17,16 +17,20 @@ import evoalg.fitness.IEvaluate;
 import evoalg.genotype.bitstring.BitString;
 import evoalg.genotype.bitstring.BitStringCrsOnePoint;
 import evoalg.genotype.bitstring.BitStringCrsUniform;
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
 
 public class CrossoverTest {
 
   @SuppressWarnings("unchecked")
   private final IEvaluate<BitString> ievaluate = Mockito.mock(IEvaluate.class);
 
+  private final IRandomness random = new DefaultRandom();
+
   @Test
   public void crossoverOperatorListIsImmutable() {
-    List<CrossoverOp<BitString>> operators = Arrays.asList(new BitStringCrsOnePoint());
-    Crossover<BitString> crossover = new Crossover<BitString>(operators);
+    List<CrossoverOp<BitString>> operators = Arrays.asList(new BitStringCrsOnePoint(random));
+    Crossover<BitString> crossover = new Crossover<BitString>(operators, random);
     assertTrue(crossover.getCrossoverOp() instanceof ImmutableList);
   }
 
@@ -38,7 +42,7 @@ public class CrossoverTest {
     Individual<BitString> expectedChild = new Individual<BitString>(ievaluate, genotype);
 
     List<CrossoverOp<BitString>> operators = setupOperators(ind1, ind2, expectedChild);
-    Crossover<BitString> crossover = new Crossover<BitString>(operators);
+    Crossover<BitString> crossover = new Crossover<BitString>(operators, random);
 
     Individual<BitString> child = crossover.mate(ind1, ind2);
 

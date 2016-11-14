@@ -1,13 +1,13 @@
 package evoalg.genotype;
 
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 import com.google.common.base.Preconditions;
 import com.google.common.collect.ImmutableList;
 
 import evoalg.Individual;
+import evoalg.random.IRandomness;
 
 /**
  * Main mutation class that uses mutation operators to mutate and individual
@@ -18,13 +18,13 @@ import evoalg.Individual;
 public class Mutation<T extends Genotype<T>> {
 
   private final List<MutationOp<T>> operators;
-  private final Random random;
+  private final IRandomness random;
   private final double indMutProb;
 
-  public Mutation(List<MutationOp<T>> operators, double indMutProb) {
+  public Mutation(List<MutationOp<T>> operators, double indMutProb, IRandomness random) {
     Preconditions.checkArgument(0d <= indMutProb && indMutProb <= 1d, "Mutation probability must be in range [0, 1]");
     this.operators = ImmutableList.copyOf(operators);
-    this.random = new Random();
+    this.random = random;
     this.indMutProb = indMutProb;
   }
 
@@ -39,8 +39,13 @@ public class Mutation<T extends Genotype<T>> {
   }
 
   /**
-   * Mutates specified individual with random mutation operator and random probability.
+   * Mutates specified individual with mutation operator and random probability.
    * If mutation will not happen then original individual is returned.
+   *
+   * Mutation operator is selected randomly where every operator has the same
+   * chance of being selected. If you want to have a higher chance to select
+   * a certain operator, for now, you can just add multiple instance of that
+   * operator in the operators list.
    *
    * @param ind individual that might be mutated
    * @return mutated or original individual.

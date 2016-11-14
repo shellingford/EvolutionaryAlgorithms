@@ -1,11 +1,11 @@
 package evoalg.genotype;
 
 import java.util.List;
-import java.util.Random;
 
 import com.google.common.collect.ImmutableList;
 
 import evoalg.Individual;
+import evoalg.random.IRandomness;
 
 /**
  * Main crossover class that uses crossover operators to mate two individuals
@@ -16,15 +16,19 @@ import evoalg.Individual;
 public class Crossover<T extends Genotype<T>> {
 
   private List<CrossoverOp<T>> operators;
-  private final Random random;
+  private final IRandomness random;
 
-  public Crossover(List<CrossoverOp<T>> operators) {
+  public Crossover(List<CrossoverOp<T>> operators, IRandomness random) {
     this.operators = ImmutableList.copyOf(operators);
-    this.random = new Random();
+    this.random = random;
   }
 
   /**
-   * Mates two individuals with a random crossover operator and returns their child.
+   * Mates two individuals with a crossover operator and returns their child.
+   * Crossover operator is selected randomly where every operator has the same
+   * chance of being selected. If you want to have a higher chance to select
+   * a certain operator, for now, you can just add multiple instance of that
+   * operator in the operators list.
    *
    * @param ind1 parent
    * @param ind2 parent

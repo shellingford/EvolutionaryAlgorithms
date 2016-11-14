@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import evoalg.genotype.MutationOp;
+import evoalg.random.IRandomness;
 
 /**
  * Simple mutation algorithm, where it randomly takes one bit of the bitstring and
@@ -16,6 +17,10 @@ import evoalg.genotype.MutationOp;
  *  Mutated:   0110101
  */
 public class BitStringMutSimple extends MutationOp<BitString> {
+
+  public BitStringMutSimple(IRandomness random) {
+    super(random);
+  }
 
   @Override
   public BitString mutate(BitString genotype) {

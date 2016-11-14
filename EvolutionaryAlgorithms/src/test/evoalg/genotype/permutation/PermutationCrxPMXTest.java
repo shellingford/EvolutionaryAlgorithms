@@ -8,14 +8,19 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
+
 public class PermutationCrxPMXTest {
+
+  private final IRandomness random = new DefaultRandom();
 
   @Test
   public void correctlyMates() {
     Permutation parent1 = new Permutation(Arrays.asList(1, 2, 3, 4, 5));
     Permutation parent2 = new Permutation(Arrays.asList(5, 4, 3, 2, 1));
 
-    PermutationCrxPMX pmx = new PermutationCrxPMX();
+    PermutationCrxPMX pmx = new PermutationCrxPMX(random);
     Permutation child = pmx.mate(parent1, parent2);
     assertTrue(child.isValid());
 

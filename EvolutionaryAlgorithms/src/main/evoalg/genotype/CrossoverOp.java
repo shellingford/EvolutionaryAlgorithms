@@ -1,8 +1,7 @@
 package evoalg.genotype;
 
-import java.util.Random;
-
 import lombok.Getter;
+import evoalg.random.IRandomness;
 
 /**
  * Abstract class for crossover operator.
@@ -15,10 +14,10 @@ import lombok.Getter;
 @Getter
 public abstract class CrossoverOp<T extends Genotype<T>> {
 
-  private Random random;
+  private final IRandomness random;
 
-  public CrossoverOp() {
-    this.random = new Random();
+  public CrossoverOp(IRandomness random) {
+    this.random = random;
   }
 
   /**

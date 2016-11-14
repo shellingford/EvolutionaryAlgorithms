@@ -4,6 +4,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import evoalg.genotype.CrossoverOp;
+import evoalg.random.IRandomness;
 
 /**
  *  Bitstring crossover uniform operator.
@@ -18,6 +19,10 @@ import evoalg.genotype.CrossoverOp;
  *  Child:   0001101 (same parent values are copied, others are random)
  */
 public class BitStringCrsUniform extends CrossoverOp<BitString> {
+
+  public BitStringCrsUniform(IRandomness random) {
+    super(random);
+  }
 
   @Override
   public BitString mate(BitString parent1, BitString parent2) {

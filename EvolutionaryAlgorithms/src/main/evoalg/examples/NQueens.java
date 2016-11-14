@@ -19,8 +19,13 @@ import evoalg.genotype.CrossoverOp;
 import evoalg.genotype.Mutation;
 import evoalg.genotype.MutationOp;
 import evoalg.genotype.permutation.Permutation;
+import evoalg.genotype.permutation.PermutationCrxOX;
 import evoalg.genotype.permutation.PermutationCrxPMX;
+import evoalg.genotype.permutation.PermutationMutInv;
+import evoalg.genotype.permutation.PermutationMutRot;
 import evoalg.genotype.permutation.PermutationMutToggle;
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
 import evoalg.selection.SelBestOp;
 import evoalg.selection.SelRandomOp;
 import evoalg.selection.SelWorstOp;
@@ -59,7 +64,7 @@ public class NQueens implements IMilestone<Permutation>, IEvaluate<Permutation> 
 
   @Override
   public boolean reached(Population<Permutation> population, int generationNo, long duration) {
-    return generationNo > 1000;
+    return generationNo > 3000;
   }
 
   public void start() {
@@ -107,10 +112,13 @@ public class NQueens implements IMilestone<Permutation>, IEvaluate<Permutation> 
    * @return fully setup algorithm instance
    */
   private Algorithm<Permutation> setupAlgorithm() {
-    List<CrossoverOp<Permutation>> crxOperators = Arrays.asList(new PermutationCrxPMX());
-    List<MutationOp<Permutation>> mutOperators = Arrays.asList(new PermutationMutToggle());
-    Crossover<Permutation> crossover = new Crossover<>(crxOperators);
-    Mutation<Permutation> mutation = new Mutation<>(mutOperators, 0.4d);
+    IRandomness random = new DefaultRandom();
+    List<CrossoverOp<Permutation>> crxOperators = Arrays.asList(new PermutationCrxPMX(random),
+        new PermutationCrxOX(random));
+    List<MutationOp<Permutation>> mutOperators = Arrays.asList(new PermutationMutInv(random),
+        new PermutationMutToggle(random), new PermutationMutInv(random), new PermutationMutRot(random));
+    Crossover<Permutation> crossover = new Crossover<>(crxOperators, random);
+    Mutation<Permutation> mutation = new Mutation<>(mutOperators, 0.1d, random);
 
     int tournamentSize = 4;
     return new SteadyStateTournament<>(mutation, crossover, tournamentSize, new SelRandomOp<Permutation>(),

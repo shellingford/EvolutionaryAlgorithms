@@ -10,7 +10,12 @@ import java.util.stream.IntStream;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.Test;
 
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
+
 public class BitStringCrsUniformTest {
+
+  private final IRandomness random = new DefaultRandom();
 
   @Test
   public void matesCorrectlyForEqualIndividuals() {
@@ -18,7 +23,7 @@ public class BitStringCrsUniformTest {
     BitString ind1 = new BitString(data);
     BitString ind2 = new BitString(data);
 
-    BitStringCrsUniform crs = new BitStringCrsUniform();
+    BitStringCrsUniform crs = new BitStringCrsUniform(random);
     BitString ind3 = crs.mate(ind1, ind2);
 
     assertEquals(ind1.getData(), ind3.getData());
@@ -32,7 +37,7 @@ public class BitStringCrsUniformTest {
     List<Byte> data2 = IntStream.range(0, 5).mapToObj(i -> (byte) 0).collect(Collectors.toList());
     BitString ind2 = new BitString(data2);
 
-    BitStringCrsUniform crs = new BitStringCrsUniform();
+    BitStringCrsUniform crs = new BitStringCrsUniform(random);
     boolean indMutated = false;
     // there is always a chance that random mutation 0/1 will result in previous
     // value, so we run it multiple times to have much lower chance for that to

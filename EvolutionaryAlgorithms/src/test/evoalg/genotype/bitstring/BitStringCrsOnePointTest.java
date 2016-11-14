@@ -11,7 +11,12 @@ import java.util.stream.IntStream;
 
 import org.junit.Test;
 
+import evoalg.random.DefaultRandom;
+import evoalg.random.IRandomness;
+
 public class BitStringCrsOnePointTest {
+
+  private final IRandomness random = new DefaultRandom();
 
   @Test
   public void matesCorrectlyForEqualIndividuals() {
@@ -19,7 +24,7 @@ public class BitStringCrsOnePointTest {
     BitString ind1 = new BitString(data);
     BitString ind2 = new BitString(data);
 
-    BitStringCrsOnePoint crs = new BitStringCrsOnePoint();
+    BitStringCrsOnePoint crs = new BitStringCrsOnePoint(random);
     BitString ind3 = crs.mate(ind1, ind2);
 
     assertEquals(ind1.getData(), ind3.getData());
@@ -33,7 +38,7 @@ public class BitStringCrsOnePointTest {
     List<Byte> data2 = IntStream.range(0, 5).mapToObj(i -> (byte) 1).collect(Collectors.toList());
     BitString parent1 = new BitString(data2);
 
-    BitStringCrsUniform crs = new BitStringCrsUniform();
+    BitStringCrsUniform crs = new BitStringCrsUniform(random);
     Set<Byte> parentIds = new HashSet<>();
     // there is always a chance that random selection of the parent will result in
     // taking the same parent 2 times in a row, so we run the test multiple times and
