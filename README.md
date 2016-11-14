@@ -19,6 +19,8 @@ Currently implemented genotypes and crossover/mutation operators for them:
  
 There are also two examples, one for each genotype:
 * OneMax - bitstring genotype
-* N-qeens problem - permutation genotype
+* N-queens problem - permutation genotype
+
+
 
 NOTE: I'm using Lombok to replace a lot of boilerplate code (getters, constructors...) with annotations so you need to install it for your IDE from: https://projectlombok.org/download.html
