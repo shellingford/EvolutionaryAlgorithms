@@ -1,58 +1,73 @@
 package evoalg.genotype.bitstring;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import evoalg.random.DefaultRandom;
 import evoalg.random.IRandomness;
 
 public class BitStringCrsOnePointTest {
 
-  private final IRandomness random = new DefaultRandom();
+  private final IRandomness random = Mockito.mock(IRandomness.class);
 
   @Test
-  public void matesCorrectlyForEqualIndividuals() {
-    List<Byte> data = IntStream.range(0, 5).mapToObj(i -> (byte) 1).collect(Collectors.toList());
-    BitString ind1 = new BitString(data);
-    BitString ind2 = new BitString(data);
+  public void matesCorrectlyP1P2() {
+    BitString ind1 = new BitString(Arrays.asList((byte) 1, (byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 0));
+    BitString ind2 = new BitString(Arrays.asList((byte) 1, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0));
+
+    when(random.nextInt(7)).thenReturn(3);
+    when(random.nextBoolean()).thenReturn(true);
 
     BitStringCrsOnePoint crs = new BitStringCrsOnePoint(random);
-    BitString ind3 = crs.mate(ind1, ind2);
+    BitString child = crs.mate(ind1, ind2);
 
-    assertEquals(ind1.getData(), ind3.getData());
-    assertEquals(ind2.getData(), ind3.getData());
+    assertEquals(Arrays.asList((byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0), child.getData());
   }
 
   @Test
-  public void matesCorrectlyForDifferentIndividuals() {
-    List<Byte> data1 = IntStream.range(0, 5).mapToObj(i -> (byte) 0).collect(Collectors.toList());
-    BitString parent0 = new BitString(data1);
-    List<Byte> data2 = IntStream.range(0, 5).mapToObj(i -> (byte) 1).collect(Collectors.toList());
-    BitString parent1 = new BitString(data2);
+  public void matesCorrectlyP2P1() {
+    BitString ind1 = new BitString(Arrays.asList((byte) 1, (byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 0));
+    BitString ind2 = new BitString(Arrays.asList((byte) 1, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0));
 
-    BitStringCrsUniform crs = new BitStringCrsUniform(random);
-    Set<Byte> parentIds = new HashSet<>();
-    // there is always a chance that random selection of the parent will result in
-    // taking the same parent 2 times in a row, so we run the test multiple times and
-    // check if at least once parent1 and parent2 will be taken for first part of the bitstring
-    // random position is calculated within operator so we don't test that (for now)
-    for (int i = 0; i < 5; i++) {
-      BitString ind3 = crs.mate(parent0, parent1);
-      //parent0 is only 0s, and parent1 is only 1s, so if first bit is 0 it means that it has taken
-      //bits from parent0, and 1 if it was from parent1
-      parentIds.add(ind3.getData().get(0));
-    }
+    when(random.nextInt(7)).thenReturn(3);
+    when(random.nextBoolean()).thenReturn(false);
 
-    Set<Byte> expectedParentIds = new HashSet<>(Arrays.asList((byte) 0, (byte) 1));
-    assertEquals(expectedParentIds, parentIds);
+    BitStringCrsOnePoint crs = new BitStringCrsOnePoint(random);
+    BitString child = crs.mate(ind1, ind2);
+
+    assertEquals(Arrays.asList((byte) 1, (byte) 1, (byte) 0, (byte) 1, (byte) 1, (byte) 0), child.getData());
+  }
+
+  @Test
+  public void matesCorrectlyAllFromP1() {
+    BitString ind1 = new BitString(Arrays.asList((byte) 1, (byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 1));
+    BitString ind2 = new BitString(Arrays.asList((byte) 1, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0));
+
+    when(random.nextInt(7)).thenReturn(6);
+    when(random.nextBoolean()).thenReturn(true);
+
+    BitStringCrsOnePoint crs = new BitStringCrsOnePoint(random);
+    BitString child = crs.mate(ind1, ind2);
+
+    assertEquals(Arrays.asList((byte) 1, (byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 1), child.getData());
+  }
+
+  @Test
+  public void matesCorrectlyAllFromP2() {
+    BitString ind1 = new BitString(Arrays.asList((byte) 1, (byte) 0, (byte) 0, (byte) 1, (byte) 1, (byte) 0));
+    BitString ind2 = new BitString(Arrays.asList((byte) 1, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0));
+
+    when(random.nextInt(6)).thenReturn(0);
+    when(random.nextBoolean()).thenReturn(true);
+
+    BitStringCrsOnePoint crs = new BitStringCrsOnePoint(random);
+    BitString child = crs.mate(ind1, ind2);
+
+    assertEquals(Arrays.asList((byte) 1, (byte) 1, (byte) 0, (byte) 0, (byte) 0, (byte) 0), child.getData());
   }
 
 }

@@ -1,32 +1,28 @@
 package evoalg.genotype.permutation;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.when;
 
-import java.util.stream.IntStream;
+import java.util.Arrays;
 
 import org.junit.Test;
+import org.mockito.Mockito;
 
-import evoalg.random.DefaultRandom;
 import evoalg.random.IRandomness;
 
 public class PermutationMutToggleTest {
 
-  private final IRandomness random = new DefaultRandom();
+  private final IRandomness random = Mockito.mock(IRandomness.class);
 
   @Test
   public void correctlyMutates() {
-    Permutation individual = new Permutation(5);
+    Permutation individual = new Permutation(Arrays.asList(1, 2, 3, 5, 4, 6, 7, 8, 9));
+    when(random.nextInt(8)).thenReturn(2);
+    when(random.nextInt(6)).thenReturn(1);
     PermutationMutToggle mutation = new PermutationMutToggle(random);
 
     Permutation mutated = mutation.mutate(individual);
-    //as we only replace two numbers, difference must be exactly 2 numbers
-    assertEquals(2, difference(individual, mutated));
-    assertTrue(mutated.isValid());
+    assertEquals(Arrays.asList(1, 2, 4, 5, 3, 6, 7, 8, 9), mutated.getData());
   }
 
-  private int difference(Permutation individual, Permutation mutated) {
-    int equalNums = (int) IntStream.range(0, individual.size()).filter(i -> individual.get(i) == mutated.get(i)).count();
-    return individual.size() - equalNums;
-  }
 }

@@ -17,7 +17,6 @@ import evoalg.fitness.IEvaluate;
 import evoalg.genotype.bitstring.BitString;
 import evoalg.genotype.bitstring.BitStringCrsOnePoint;
 import evoalg.genotype.bitstring.BitStringCrsUniform;
-import evoalg.random.DefaultRandom;
 import evoalg.random.IRandomness;
 
 public class CrossoverTest {
@@ -25,7 +24,7 @@ public class CrossoverTest {
   @SuppressWarnings("unchecked")
   private final IEvaluate<BitString> ievaluate = Mockito.mock(IEvaluate.class);
 
-  private final IRandomness random = new DefaultRandom();
+  private final IRandomness random = Mockito.mock(IRandomness.class);
 
   @Test
   public void crossoverOperatorListIsImmutable() {
@@ -41,6 +40,7 @@ public class CrossoverTest {
     Individual<BitString> ind2 = new Individual<BitString>(ievaluate, genotype.initializeData());
     Individual<BitString> expectedChild = new Individual<BitString>(ievaluate, genotype);
 
+    when(random.nextInt(2)).thenReturn(1);
     List<CrossoverOp<BitString>> operators = setupOperators(ind1, ind2, expectedChild);
     Crossover<BitString> crossover = new Crossover<BitString>(operators, random);
 
@@ -52,7 +52,8 @@ public class CrossoverTest {
   private List<CrossoverOp<BitString>> setupOperators(Individual<BitString> ind1, Individual<BitString> ind2,
       Individual<BitString> expectedChild) {
     BitStringCrsOnePoint crsOnePoint = Mockito.mock(BitStringCrsOnePoint.class);
-    when(crsOnePoint.mate(ind1.getGenotype(), ind2.getGenotype())).thenReturn(expectedChild.getGenotype());
+    Individual<BitString> expectedChild2 = new Individual<BitString>(ievaluate, ind1.getGenotype().initializeData());
+    when(crsOnePoint.mate(ind1.getGenotype(), ind2.getGenotype())).thenReturn(expectedChild2.getGenotype());
 
     BitStringCrsUniform crsUniform = Mockito.mock(BitStringCrsUniform.class);
     when(crsUniform.mate(ind1.getGenotype(), ind2.getGenotype())).thenReturn(expectedChild.getGenotype());

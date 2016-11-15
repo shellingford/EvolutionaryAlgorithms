@@ -10,8 +10,14 @@ import evoalg.Individual;
 import evoalg.random.IRandomness;
 
 /**
- * Main mutation class that uses mutation operators to mutate and individual
- * or a list of individuals.
+ * Main mutation class that uses mutation operators to mutate an individual
+ * or a list of individuals. If individual will be mutated depends on the
+ * set probability.
+ *
+ * Mutation operator is selected randomly where every operator has the same
+ * chance of being selected. If you want to have a higher chance to select
+ * a certain operator, for now, you can just add multiple instance of that
+ * operator in the operators list.
  *
  * @param <T> genotype
  */
@@ -29,7 +35,8 @@ public class Mutation<T extends Genotype<T>> {
   }
 
   /**
-   * Tries to mutate every individual from the pool.
+   * Tries to mutate every individual from the pool. Checks for every individual
+   * if mutation will occur.
    *
    * @param pool pool of individuals
    * @return pool with mutated individuals
@@ -41,11 +48,6 @@ public class Mutation<T extends Genotype<T>> {
   /**
    * Mutates specified individual with mutation operator and random probability.
    * If mutation will not happen then original individual is returned.
-   *
-   * Mutation operator is selected randomly where every operator has the same
-   * chance of being selected. If you want to have a higher chance to select
-   * a certain operator, for now, you can just add multiple instance of that
-   * operator in the operators list.
    *
    * @param ind individual that might be mutated
    * @return mutated or original individual.
