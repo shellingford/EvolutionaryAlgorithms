@@ -57,7 +57,8 @@ public class Individual<T extends Genotype<T>> {
 
   @Override
   public String toString() {
-    return "Individual [genotype=" + genotype + " => fitness value:" + (getFitness() != null ? getFitness().getValue() + "" : "none") + "]";
+    return "Individual\n\tgenotype=" + genotype + "\n\tfitness value:" +
+            (getFitness() != null ? getFitness().getValue() + "" : "none") + "]";
   }
 
   @Override
