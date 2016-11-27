@@ -33,7 +33,7 @@ import evoalg.selection.SelWorstOp;
 /**
  * N-queens problem is problem of placing N queens on the NxN chess board so that no two queens
  * threaten each other. Thus, a solution requires that no two queens share the same row, column,
- * or diagonal.
+ * or diagonal.<p>
  *
  * Permutation genotype is pretty convenient for solving this problem, as we just need to check
  * for diagonal collisions of queens. That is because position in the list represents column

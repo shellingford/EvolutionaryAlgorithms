@@ -16,11 +16,14 @@ import evoalg.selection.SelWorstOp;
 
 /**
  * Steady-state tournament individual selection.
+ * <p>
  * Algorithm is as follows:
- * 1) select randomly tournamentSize individuals from deme
- * 2) remove worst individual from those random ones
- * 3) mate first two individuals from the remaining ones to create a child
- * 4) repeat this N number of times, where N is deme size
+ * <ol>
+ *  <li>select randomly <code>tournamentSize</code> individuals from <code>deme</code></li>
+ *  <li>remove worst individual from those random ones</li>
+ *  <li>mate first two individuals from the remaining ones to create a child</li>
+ *  <li>repeat this N number of times, where N is deme size</li>
+ * </ol>
  *
  * @param <T> genotype
  */

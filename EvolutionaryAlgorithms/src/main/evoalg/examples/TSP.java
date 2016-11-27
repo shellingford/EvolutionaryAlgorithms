@@ -31,12 +31,13 @@ import evoalg.selection.SelWorstOp;
 /**
  * Given a collection of cities and the cost of travel between each pair of them, the travelling
  * salesman problem, or TSP for short, is to find the cheapest way of visiting all of the cities
- * and returning to your starting point.
+ * and returning to your starting point. <br>
  *
  * Permutation genotype is used here as an order of cities salesman needs to visit. For TSP permutation
- * genotype can be used as other different representations of the path.
+ * genotype can be used as other different representations of the path.<p>
  *
- * Data for 29 cities taken from: http://www.math.uwaterloo.ca/tsp/world/wilog.html
+ * Data for 29 cities taken from:
+ * <a href="http://www.math.uwaterloo.ca/tsp/world/wilog.html"> http://www.math.uwaterloo.ca/tsp/world/wilog.html </a>
  */
 public class TSP implements IEvaluate<Permutation>, IMilestone<Permutation> {
 
