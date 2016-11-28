@@ -56,7 +56,6 @@ public class Permutation extends Genotype<Permutation> {
    * In permutation there must not be duplicate numbers, all numbers in the data list must
    * be unique.
    *
-   * @param individual individual's data we are checking
    * @return true if data is valid, false otherwise
    */
   private boolean checkIsValid() {
@@ -75,10 +74,10 @@ public class Permutation extends Genotype<Permutation> {
   }
 
   /**
-   * Get byte with specified index.
+   * Get bit with specified index.
    *
-   * @param index position of the byte
-   * @return byte at specified position
+   * @param index position of the bit
+   * @return bit at specified position
    */
   public int get(int index) {
     return data.get(index);

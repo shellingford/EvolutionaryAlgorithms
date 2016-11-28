@@ -17,9 +17,16 @@ Currently implemented genotypes and crossover/mutation operators for them:
  * inversion mutation
  * simple toggle mutation
  
-There are also two examples, one for each genotype:
-* OneMax - bitstring genotype
-* N-queens problem - permutation genotype
+* FloatingPoint
+
+Selection algorithms:
+* Steady State Tournament
+* Roulette Wheel Selection
+ 
+Implemented examples for different genotypes, algorithms and operators:
+* OneMax - Bitstring genotype
+* N-queens problem - Permutation genotype
+* Traveling Salesman Problem - Permutation genotype (with data from http://www.math.uwaterloo.ca/tsp/index.html)
 
 
 

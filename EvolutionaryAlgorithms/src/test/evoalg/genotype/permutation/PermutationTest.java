@@ -25,6 +25,7 @@ public class PermutationTest {
     int expectedDataSize = 5;
     Permutation permutation = new Permutation(expectedDataSize);
     assertEquals(expectedDataSize, permutation.size());
+    assertTrue(permutation.isValid());
   }
 
   @Test
@@ -66,8 +67,9 @@ public class PermutationTest {
   public void correctlyInitializedData() {
     int expectedDataSize = 5;
     Permutation permutation = new Permutation(expectedDataSize);
-    Permutation initializedBitstring = permutation.initializeData();
-    assertEquals(expectedDataSize, initializedBitstring.size());
+    Permutation initializedPermutation = permutation.initializeData();
+    assertEquals(expectedDataSize, initializedPermutation.size());
+    assertTrue(initializedPermutation.isValid());
   }
 
   @Test

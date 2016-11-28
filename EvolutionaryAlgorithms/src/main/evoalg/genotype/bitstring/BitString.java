@@ -64,10 +64,10 @@ public class BitString extends Genotype<BitString> {
   }
 
   /**
-   * Get byte with specified index.
+   * Get bit with specified index.
    *
-   * @param index position of the byte
-   * @return byte at specified position
+   * @param index position of the bit
+   * @return bit at specified position
    */
   public byte get(int index) {
     return data.get(index);
