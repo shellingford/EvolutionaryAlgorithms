@@ -78,6 +78,17 @@ public class FloatingPoint extends Genotype<FloatingPoint> {
     return this.data.size();
   }
 
+  /**
+   * Creates new instance of FloatingPoint object that is copy of current one but
+   * with newData bits.
+   *
+   * @param newData new bits
+   * @return copy of current instance of FloatingPoint with new bits
+   */
+  public FloatingPoint replaceData(List<Double> newData) {
+    return new FloatingPoint(newData, minValue, maxValue);
+  }
+
   @Override
   public FloatingPoint copy() {
     return new FloatingPoint(data, minValue, maxValue);
@@ -128,6 +139,11 @@ public class FloatingPoint extends Genotype<FloatingPoint> {
       return false;
     }
     return true;
+  }
+
+  @Override
+  public String toString() {
+    return "FloatingPoint [data=" + data + ", minValue=" + minValue + ", maxValue=" + maxValue + "]";
   }
 
 }

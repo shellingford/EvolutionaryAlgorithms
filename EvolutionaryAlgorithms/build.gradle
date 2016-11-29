@@ -1,14 +1,10 @@
-import com.google.common.io.ByteStreams
-import org.apache.tools.ant.filters.ReplaceTokens
-import org.apache.tools.ant.taskdefs.condition.Os
-
 buildscript {
   repositories {
     jcenter()
   }
   dependencies {
     classpath 'com.github.ben-manes:gradle-versions-plugin:0.13.0'
-    classpath 'com.google.guava:guava:17.0'
+    classpath 'com.google.guava:guava:20.0'
     classpath 'org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE'
   }
 }
@@ -22,14 +18,8 @@ apply plugin: 'eclipse'
 apply plugin: 'findbugs'
 apply plugin: 'java'
 apply plugin: 'spring-boot'
-apply plugin: 'war'
 
 sourceCompatibility = 1.8
-
-def profile = System.properties.profile ?: 'development'
-if (!['development', 'production', 'uat'].contains(profile)) {
-  throw new Error('invalid profile')
-}
 
 repositories {
   jcenter()
@@ -49,23 +39,15 @@ sourceSets.each {
 }
 
 configurations {
-  proprietary
-  (profile == 'production' ? providedCompile : compile).extendsFrom proprietary
-
   integCompile.extendsFrom configurations.testCompile
   integRuntime.extendsFrom configurations.testRuntime
 
   all {
     exclude group: 'commons-logging'
-    exclude group: 'org.apache.tomcat'
-    exclude group: 'org.apache.tomcat.embed'
-    exclude module: 'spring-boot-starter-tomcat'
   }
 }
 
 dependencies {
-  compile 'joda-time:joda-time'
-
   compile 'com.google.guava:guava:20.0'
   compile 'org.projectlombok:lombok:1.16.10'
   compile 'org.apache.commons:commons-lang3:3.5'
@@ -75,24 +57,11 @@ dependencies {
   testCompile 'org.mockito:mockito-core'
 }
 
-String springInstrPath = configurations.compile.files.find { it.name.contains('spring-instrument') }
-String arg = '-javaagent:'+springInstrPath
-
-applicationDefaultJvmArgs = [arg]
-
 task wrapper(type: Wrapper) {
   gradleVersion = '2.0'
 }
 
 tasks.withType(JavaCompile) { options.compilerArgs << '-Xlint:none'}
-
-war {
-  archiveName "$baseName.$extension"
-}
-
-springBoot {
-  backupSource = false
-}
 
 checkstyle {
   configProperties = [basedir: projectDir]
