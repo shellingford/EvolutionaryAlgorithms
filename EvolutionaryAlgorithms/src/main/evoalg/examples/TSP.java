@@ -27,6 +27,9 @@ import evoalg.random.IRandomness;
 import evoalg.selection.SelBestOp;
 import evoalg.selection.SelRandomOp;
 import evoalg.selection.SelWorstOp;
+import evoalg.termination.MaxDurationTermOp;
+import evoalg.termination.MaxGenTermOp;
+import evoalg.termination.TerminatorManager;
 
 /**
  * Given a collection of cities and the cost of travel between each pair of them, the travelling
@@ -41,14 +44,20 @@ import evoalg.selection.SelWorstOp;
  */
 public class TSP implements IEvaluate<Permutation>, IMilestone<Permutation> {
 
-  private static final long serialVersionUID = 1L;
-
   private Map<String, Integer> distanceMap;
   private int permutationSize;
 
+  private final TerminatorManager<Permutation> terminatorManager;
+
+  public TSP() {
+    terminatorManager = new TerminatorManager<Permutation>(
+        new MaxGenTermOp<Permutation>(10000),
+        new MaxDurationTermOp<Permutation>(2000));
+  }
+
   @Override
   public boolean reached(Population<Permutation> population, int generationNo, long duration) {
-    return generationNo > 10000;
+    return terminatorManager.shouldTerminate(population, generationNo, duration);
   }
 
   /**

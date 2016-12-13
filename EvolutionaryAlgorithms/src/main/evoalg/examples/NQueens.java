@@ -29,6 +29,8 @@ import evoalg.random.IRandomness;
 import evoalg.selection.SelBestOp;
 import evoalg.selection.SelRandomOp;
 import evoalg.selection.SelWorstOp;
+import evoalg.termination.ITerminationOperator;
+import evoalg.termination.MaxGenTermOp;
 
 /**
  * N-queens problem is problem of placing N queens on the NxN chess board so that no two queens
@@ -41,9 +43,9 @@ import evoalg.selection.SelWorstOp;
  * list and only one list, we automatically make row or column collisions impossible.
  */
 public class NQueens implements IMilestone<Permutation>, IEvaluate<Permutation> {
-  private static final long serialVersionUID = 1L;
-
   private static final int PERMUTATION_SIZE = 12;
+
+  private final ITerminationOperator<Permutation> maxGenTermOp = new MaxGenTermOp<Permutation>(3000);
 
   @Override
   public Fitness<Permutation> evaluate(Individual<Permutation> individual) {
@@ -64,14 +66,14 @@ public class NQueens implements IMilestone<Permutation>, IEvaluate<Permutation> 
 
   @Override
   public boolean reached(Population<Permutation> population, int generationNo, long duration) {
-    return generationNo > 3000;
+    return maxGenTermOp.shouldTerminate(population, generationNo, duration);
   }
 
   public void start() {
     State<Permutation> state = setupState();
     long start = System.currentTimeMillis();
     state.run();
-    System.out.println("Duration: " + (System.currentTimeMillis() - start));
+    System.out.println("Duration: " + (System.currentTimeMillis() - start) + "ms");
 
     SelBestOp<Permutation> selector = new SelBestOp<Permutation>();
     List<Individual<Permutation>> allIndividuals =

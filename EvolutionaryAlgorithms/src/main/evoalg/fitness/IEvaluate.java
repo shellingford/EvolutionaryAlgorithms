@@ -1,7 +1,5 @@
 package evoalg.fitness;
 
-import java.io.Serializable;
-
 import evoalg.Individual;
 import evoalg.genotype.Genotype;
 
@@ -13,7 +11,7 @@ import evoalg.genotype.Genotype;
  *
  * @param <T> individual's genotype
  */
-public interface IEvaluate<T extends Genotype<T>> extends Serializable {
+public interface IEvaluate<T extends Genotype<T>> {
 
   /**
    * Fitness evaluation function.

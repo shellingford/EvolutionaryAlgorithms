@@ -30,8 +30,6 @@ import evoalg.selection.SelBestOp;
  * some function's min value.
  */
 public class MinFunction implements IEvaluate<FloatingPoint>, IMilestone<FloatingPoint> {
-  private static final long serialVersionUID = 1L;
-
   private static final int FLOATING_POINT_SIZE = 5;
   private static final double FP_MIN = -5.12;
   private static final double FP_MAX = 5.12;

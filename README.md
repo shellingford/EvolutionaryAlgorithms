@@ -18,6 +18,8 @@ Currently implemented genotypes and crossover/mutation operators for them:
  * simple toggle mutation
  
 * FloatingPoint
+ * single point crossover operator
+ * simple replace bit value mutation
 
 Selection algorithms:
 * Steady State Tournament
@@ -27,6 +29,7 @@ Implemented examples for different genotypes, algorithms and operators:
 * OneMax - Bitstring genotype
 * N-queens problem - Permutation genotype
 * Traveling Salesman Problem - Permutation genotype (with data from http://www.math.uwaterloo.ca/tsp/index.html)
+* MinFunction - FloatingPoint genotype
 
 
 

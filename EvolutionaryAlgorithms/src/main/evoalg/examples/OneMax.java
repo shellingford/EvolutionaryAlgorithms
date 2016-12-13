@@ -31,8 +31,6 @@ import evoalg.selection.SelWorstOp;
  * a bitstring individual with most 1s in it.
  */
 public class OneMax implements IEvaluate<BitString>, IMilestone<BitString> {
-  private static final long serialVersionUID = 1L;
-
   private static final int BITSTRING_SIZE = 15;
 
   @Override
